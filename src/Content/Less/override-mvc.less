@@ -1,0 +1,408 @@
+﻿@import "override-mvc.variables.less";
+ 
+div.checkbox {
+    .padding-left(20px);
+
+    >label {
+        padding-left: 0;
+    }
+}
+input,
+select,
+textarea,
+div.input-group.date.datetimepicker {
+    .max-width(@inputs-max-width);
+}
+
+/*@media (max-width:@screen-xs){
+    input,
+    select,
+    textarea,
+    div.input-group.date.datetimepicker {
+        .max-width(@inputs-max-width-at-mobile);
+    }
+
+    .control-label{
+        .min-width(@label-max-width-at-mobile);
+    }
+}
+@media (max-width:@less-than-mobile-screen){
+    input,
+    select,
+    textarea,
+    div.input-group.date.datetimepicker {
+        .max-width(@inputs-max-width-at-l-mobile);
+    }
+
+    .control-label{
+        .min-width(@label-max-width-at-l-mobile);
+    }
+}
+
+@media (max-width:370px){
+    input,
+    select,
+    textarea,
+    div.input-group.date.datetimepicker {
+        .max-width(160px);
+    }
+
+    .control-label{
+        .min-width(70px);
+    }
+}*/
+
+input.form-control,
+select.form-control,
+textarea.form-control {
+    display: inline;
+}
+
+.glyphicon-top-fix {
+    top: 5px;
+}
+
+
+.global-error h2 {
+    display: block;
+    color: red;
+}
+
+.global-error-ul li span {
+    margin: 5px 0 5px;
+    height: 18px;
+    width: auto;
+    text-align: left;
+}
+
+
+.form-group {
+    margin-bottom: 9px;
+    margin-top: 9px;
+}
+
+.form-group.check-boxes {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.form-group.check-boxes label {
+    padding-top: 6px;
+}
+
+// select control width
+
+.btn-group.bootstrap-select.form-control {
+    .width(294px);
+}
+
+
+
+div.bs-searchbox input.input-block-level.form-control {
+    height: 30px;
+    font-size: 13px;
+    line-height: 1;
+}
+
+.form-control.multiline-text {
+    height: 90px;
+}
+
+.li > h1 > a {
+    -webkit-background-clip: border-box;
+    -webkit-background-origin: padding-box;
+    -webkit-background-size: auto;
+    background-attachment: scroll;
+    -ms-background-clip: border-box;
+    background-clip: border-box;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+    background-origin: padding-box;
+    background-size: auto;
+    box-sizing: border-box;
+    color: #ffffff;
+    cursor: auto;
+    display: block;
+    float: left;
+    font-family: Ubuntu, Tahoma, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    height: 50px;
+    line-height: 20px;
+    list-style-image: none;
+    list-style-position: outside;
+    list-style-type: none;
+    margin-left: -15px;
+    padding-bottom: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    width: 98.015625px;
+}
+
+p.create-btn-p,
+.left-button-stacks {
+    margin: 0 0 -51px;
+}
+
+
+// bootstrap table colors.
+
+table caption {
+    background-color: #D0DEC2;
+    font-weight: bold;
+    padding: 5px;
+    text-align: center;
+}
+
+.bootstrap-table-do,
+.bootstrap-table-do tr,
+.bootstrap-table-do tr td {
+    border-color: #e8e8e8;
+}
+
+.bootstrap-table-do thead th,
+.bootstrap-table-do thead div {
+    border-color: lightgray;
+    font-weight: normal;
+    color: #2171b3;
+}
+
+.bootstrap-table-do,
+.bootstrap-table-do tr {
+    border-color: white;
+}
+
+.role-left-stack {
+    margin: 0 0 -73px;
+}
+/*textarea.form-control.big-multiline{
+    height:166px;
+}*/
+.image-size-fixed-for-model {
+    height: 110px;
+    width: 130px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+/*.modal-body [class|='col-md']:nth-child(2) {
+    padding-left: 64px;
+    padding-top: 7px;
+}*/
+
+.uploader-progress-info {
+    display: inline;
+}
+
+
+#myCarousel img.home-page-gallery-image {
+    width: 1900px;
+    height: 450px;
+}
+
+
+.description-icon {
+    top: 5px;
+    color: #bdbdbd;
+    font-size: 1.375em;
+    position: relative;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    &:before {
+        content: "\e085";
+    }
+}
+
+.bs-callout {
+    padding: 10px 20px 5px 20px;
+    margin: 20px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+}
+
+.bs-callout-info {
+    border-left-color: @call-out-color;
+}
+
+.bs-callout-info h4 {
+    color: @call-out-color;
+}
+//bootstrap overrides
+.btn {
+    font-weight: normal;
+    text-transform: none;
+}
+
+
+
+/*.btn-default {
+    color: white;
+}
+
+.btn-default:hover {
+    color: #333;
+}
+
+.btn-warning:hover {
+    background-color: #E7711C;
+}
+
+.btn-info:hover {
+    background-color: rgb(75, 112, 126);
+}
+
+.btn-primary, .btn-default {
+    background-color: @primary-color;
+}
+
+.btn-success {
+    background-color: #19c234;
+}*/
+
+// addon button
+span.input-group-addon {
+    .width(38px);
+    .height(@form-control-height);
+    display: inline-block;
+}
+
+
+.form-control {
+    .height(@form-control-height);
+    // date time
+    &.datetime-input, &.date-input {
+        .width(256px);
+    }
+}
+
+
+// date time fix
+.datepicker-start, .datetimepicker-start {
+    .input-group-addon {
+        .height(@form-control-height); 
+        //.margin(-3px ,-1px, 2px, 0px);
+        background-color: inherit;
+        color: inherit;
+        
+        &:hover {
+            //.height(@datepicker-btn-hover-height); 
+            background-color: @datepicker-btn-hover-bg-color;
+            border-color:@datepicker-btn-hover-bg-color;
+            cursor: pointer;
+            color: white;
+        }
+    }
+}
+
+.input-group {
+    input {
+        .height(@input-control-height);
+    }
+}
+
+.input-group-addon:not(:first-child):not(:last-child), .input-group-btn:not(:first-child):not(:last-child), .input-group .form-control:not(:first-child):not(:last-child) {
+    border-radius: 5px;
+}
+
+.input-group-btn:last-child > .btn, .input-group-btn:last-child > .btn-group {
+    margin-left: 0;
+}
+
+.input-group-btn {
+    .btn {
+        margin-left: 0;
+    }
+}
+
+// labels and inputs
+label.control-label {
+    font-weight: normal;
+}
+
+.controls {
+    .font-size(@input-font-size);
+}
+//font over-ride
+label.control-label, input.form-control {
+    .form-input-font();
+}
+   
+.controls-vertical {
+}
+
+
+
+// addons started
+.inner-addon {
+    position: relative;
+
+    .glyphicon, .fa {
+        position: absolute;
+        /*padding: 10px;*/
+        padding: 10px 11px 2px 9px;
+        pointer-events: none;
+    }
+}
+
+/* align icon */
+.left-addon .glyphicon, .left-addon .fa {
+    left: 0;
+}
+
+.right-addon .glyphicon, .right-addon .fa {
+    right: 0;
+}
+/* add padding  */
+.left-addon input {
+    padding-left: 30px;
+}
+
+.right-addon input {
+    padding-right: 30px;
+}
+
+
+
+
+.description-icon {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -moz-transform: translate(0, 0);
+    -ms-transform: translate(0, 0);
+    -o-transform: translate(0, 0);
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: @description-icon-color;
+
+    &:hover {
+        color: brown;
+    }
+
+    &:before {
+        content: "\f059";
+    }
+
+    .font-size(26px);
+    .top(5px);
+    .width(22px);
+}
+
+/*# sourceMappingURL=override-mvc-css.css.map */

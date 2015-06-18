@@ -1,0 +1,32 @@
+﻿@import "editor-templates.variables.less";
+
+.invalid-input {
+    .border-rounded(3px);
+    .min-width(@inputs-max-width);
+    //width: auto;
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: bold;
+    line-height: 1;
+    color: #ffffff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+
+    &.field-validation-error {
+        background-color: @input-error-bg-color;
+
+        &.break-line {
+            display: block;
+            margin-top: 4px;
+            .width(@inputs-max-width);
+        }
+    }
+}
+
+.input-validator-container {
+    display: inline-block;
+    width: 100%;
+    .max-width(@inputs-max-width);
+}
