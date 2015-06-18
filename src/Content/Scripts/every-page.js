@@ -60,7 +60,7 @@ $.genericPage = function() {
 
     });
 
-    $.byId(".register-form").submit(function(e) {
+    $.byId("register-form").submit(function(e) {
         e.preventDefault();
         var $form = $(this);
         var inputs = $form.find("input").valid();
