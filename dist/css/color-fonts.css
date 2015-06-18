@@ -1,6 +1,4 @@
-﻿@import "header.variables.less";
-@import "fonts-rimixens.less";
-/* Colors and Fonts */
+﻿/* Colors and Fonts */
 .blackish-red {
   color: #330707;
 }
@@ -9,7 +7,7 @@
 }
 .red-important {
   color: red !important;
-} 
+}
 .brownish-red {
   color: #B31010;
 }
@@ -53,7 +51,8 @@
   color: #459EC9;
 }
 .regular-font {
-    .font-size(16px);
+  font-size: 16px;
+  font-size: 1em;
 }
 .medium-font {
   font-size: 122%;
@@ -101,9 +100,8 @@
   font-size: 22px;
   font-size: 1.375em;
 }
-
 .ubuntu-font {
-    .ubuntu-font();
+  font-family: Ubuntu, Tahoma, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .bangla,
 .bangla li {
@@ -113,22 +111,23 @@
   font-weight: normal;
 }
 .almost-white {
-    color: @almost-white-color;
+  color: #bdbdbd;
 }
 .mid-error-color {
-    background-color: @bg-mid-error-color;
+  background-color: #df3b69;
 }
 .low-error-color {
-    background-color: @bg-low-error-color;
+  background-color: #ef3ecc;
 }
 .error-solution-link-color {
-    background-color: @bg-error-solution-color;
+  background-color: #2382cc;
 }
 a.error-solution-link:hover {
   text-decoration: none;
-    background-color: @bg-error-solution-color-hover;
+  background-color: #3196e4;
 }
 a.error-solution-link span:hover {
   text-decoration: none;
-    background-color: @bg-error-solution-color-hover;
+  background-color: #3196e4;
 }
+/*# sourceMappingURL=color-fonts.css.map */

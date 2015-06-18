@@ -8,20 +8,25 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "jquery-server-validation", 
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_6334"
-		Debug.AspNetCompiler.PhysicalPath = "D:\Work\Git\jquery-server-validation\"
+		Debug.AspNetCompiler.PhysicalPath = "..\jquery-server-validation\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_6334\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/localhost_6334"
-		Release.AspNetCompiler.PhysicalPath = "D:\Work\Git\jquery-server-validation\"
+		Release.AspNetCompiler.PhysicalPath = "..\jquery-server-validation\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_6334\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		SlnRelativePath = "D:\Work\Git\jquery-server-validation\"
+		SlnRelativePath = "..\jquery-server-validation\"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{444FBABE-C75E-479A-A8C0-B658F6818D81}"
+	ProjectSection(SolutionItems) = preProject
+		WebEssentials-Settings.json = WebEssentials-Settings.json
 	EndProjectSection
 EndProject
 Global

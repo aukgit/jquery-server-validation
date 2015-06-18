@@ -1,4 +1,14 @@
-﻿/*!
+﻿/// <reference path="bootstrap-datetimepicker.js" />
+/// <reference path="bootstrap.js" />
+/// <reference path="byId.js" />
+/// <reference path="every-page.js" />
+/// <reference path="jquery-2.1.4-vsdoc.js" />
+/// <reference path="jquery-2.1.4.js" />
+/// <reference path="jquery.server-validate.js" />
+/// <reference path="jquery.unobtrusive-ajax.min.js" />
+/// <reference path="jquery.validate.min.js" />
+/// <reference path="moment.js" />
+/*!
  * Written by Alim Ul Karim
  * http://alimkarim.com
  * me{at}alimkarim.com
@@ -48,6 +58,12 @@ $.genericPage = function() {
 
         sideBySide: true //show the date and time picker side by side
 
+    });
+
+    $.byId(".register-form").submit(function(e) {
+        e.preventDefault();
+        var $form = $(this);
+        var inputs = $form.find("input").valid();
     });
 }
 
