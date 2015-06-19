@@ -32,7 +32,8 @@
             },
             attributes: {
                 url: "data-url",
-                isValidate: "data-is-validate"
+                isValidate: "data-is-validate",
+                submitMethod: "data-submit-method"
             },
             icons: {
                 invalid: "fa fa-times",
@@ -61,7 +62,7 @@
     }
 
     function processAdditionalFields($elementContainer) {
-        var additionalFields = [];
+        var addFields = [];
         var selectors = this.settings.selectors.additionalFields;
         for (var i = 0; i < selectors.length; i++) {
             var selector = selectors[i];
@@ -73,10 +74,10 @@
                     name: nameOfElement,
                     value: valueOfElement
                 };
-                additionalFields.push(pushingElement);
+                addFields.push(pushingElement);
             }
         }
-        return additionalFields;
+        return addFields;
     }
 
     // Avoid Plugin.prototype conflicts
@@ -111,19 +112,57 @@
         processDiv: function ($div) {
             var $input = this.getInput($div);
             var url = this.getUrl($input);
-            
+
         },
-        inputProcessWithBlurEvent: function($input, url) {
-            
+        inputProcessWithBlurEvent: function ($input, url) {
+            var self = this;
+            $input.on('blur', function () {
+                var $inputNew = $(this);
+                var fields = self.concatAdditionalFields($inputNew);
+                self.sendRequest($inputNew, url, fields);
+            });
         },
-        sendRequest: function ($input, url) {
-            
+        concatAdditionalFields: function ($input) {
+            var addFields = this.additionalFields;
+            return addFields.push({
+                name: $input.att('name'),
+                value: $input.att('value')
+            });
         },
-        validResponse: function() {
-            
+        getSubmitMethod: function ($input) {
+            /// <summary>
+            /// Returns submit method is it post or get
+            /// </summary>
+            /// <param name="$div"></param>
+            /// <returns type=""></returns>
+            var attrs = this.settings.attributes;
+            return $input.attr(attrs.submitMethod);
         },
-        inValidResponse: function() {
-            
+        sendRequest: function ($input, url, sendingFields) {
+            var isInTestingMode = true;
+            var method = this.getSubmitMethod($input);
+            var self = this;
+            jQuery.ajax({
+                method: method, // by default "GET"
+                url: url,
+                data: sendingFields, // PlainObject or String or Array
+                dataType: "JSON" //, // "Text" , "HTML", "xml", "script" 
+            }).done(function (response) {
+                if (isInTestingMode) {
+                    console.log(response);
+                }
+                self.validResponse(response);
+            }).fail(function (jqXHR, textStatus, exceptionMessage) {
+                console.log("Request failed: " + exceptionMessage);
+            }).always(function () {
+                console.log("complete");
+            });
+        },
+        validResponse: function (response) {
+
+        },
+        inValidResponse: function (response) {
+
         }
     });
 
@@ -149,7 +188,7 @@
 
         for (var i = 0; i < $divContainers.length; i++) {
             var $divElement = $($divContainers[i]);
-            plugin($divElement, options);
+            new plugin($divElement, options);
         }
     };
 

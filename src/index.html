@@ -70,172 +70,174 @@
         <h1 class="h3" title="Registration page example">Register</h1>
         <h1 class="h5">Create a new account for <strong class="Site.com">Site.com</strong></h1>
         <hr />
-        <form action="index.html" class="form-horizontal register-form" enctype="multipart/form-data" id="register-form" method="post" role="form">
-            <input name="__RequestVerificationToken" type="hidden" value="tWwxNh3P0F0iIbngrjWV5eyjxPP5PsiC-_oB1rXTiPkEKJ--Z-v2AFy089a_LdvHzpS3We6GN_VeWBu2O4wkSXIrLQhyCaxoduBDTRbGZ_81" />    <!--uxSlide by developers-organism and Alim Ul Karim hides everything except for first item=0, we can have more than one zeros-->
-            <div data-dev-slide="0" data-dev-visited='false'>
-                <div class="form-group form-row username string-type" data-prop="username" data-is-validate="false">
-                    <div class="controls dev-plugin">
-                        <label class="col-md-2 control-label form-label username" for="username" data-prop="username">
-                            User name
-                            <span class="red">*</span>
-                        </label>
-                        <div class="col-md-10 form-input username" data-prop="username">
-                            <div class="input-validator-container">
-                                <input class="form-control" data-val="true" data-val-length="The field User name must be a string with a maximum length of 30." data-val-length-max="30" data-val-minlength="The field User name must be a string or array type with a minimum length of &#39;3&#39;." data-val-minlength-min="3" data-val-regex="Username shouldn&#39;t contain any space or punctuation or any alphanumeric character." data-val-regex-pattern="^([A-Za-z]|[A-Za-z0-9_.]+)$" data-val-required="User name is a required field." id="UserName" name="UserName" placeholder="User name*" title="User name*" type="text" value="" />
-                                <div class="validator-container">
-                                    <div class="validator"></div>
+        <div id="process-form">
+            <form action="index.html" class="form-horizontal register-form" enctype="multipart/form-data" id="register-form" method="post" role="form">
+                <input name="__RequestVerificationToken" type="hidden" value="tWwxNh3P0F0iIbngrjWV5eyjxPP5PsiC-_oB1rXTiPkEKJ--Z-v2AFy089a_LdvHzpS3We6GN_VeWBu2O4wkSXIrLQhyCaxoduBDTRbGZ_81" />    <!--uxSlide by developers-organism and Alim Ul Karim hides everything except for first item=0, we can have more than one zeros-->
+                <div data-dev-slide="0" data-dev-visited='false'>
+                    <div class="form-group form-row username string-type" data-prop="username" data-is-validate="false">
+                        <div class="controls dev-plugin">
+                            <label class="col-md-2 control-label form-label username" for="username" data-prop="username">
+                                User name
+                                <span class="red">*</span>
+                            </label>
+                            <div class="col-md-10 form-input username" data-prop="username">
+                                <div class="input-validator-container">
+                                    <input class="form-control" data-submit-method="post" data-val="true" data-val-length="The field User name must be a string with a maximum length of 30." data-val-length-max="30" data-val-minlength="The field User name must be a string or array type with a minimum length of &#39;3&#39;." data-val-minlength-min="3" data-val-regex="Username shouldn&#39;t contain any space or punctuation or any alphanumeric character." data-val-regex-pattern="^([A-Za-z]|[A-Za-z0-9_.]+)$" data-val-required="User name is a required field." id="UserName" name="UserName" placeholder="User name*" title="User name*" type="text" value="" />
+                                    <div class="validator-container">
+                                        <div class="validator"></div>
+                                    </div>
                                 </div>
+                                <a data-toggle="tooltip" data-original-title="(ASCII) User name to login. Must be unique. Character should be in between [aA-zZ], don&#39;t use space." title="(ASCII) User name to login. Must be unique. Character should be in between [aA-zZ], don&#39;t use space." class="tooltip-show">
+                                    <span class="description-icon"></span>
+                                </a>
+                                <span class="field-validation-valid invalid-input" data-valmsg-for="UserName" data-valmsg-replace="true"></span>
                             </div>
-                            <a data-toggle="tooltip" data-original-title="(ASCII) User name to login. Must be unique. Character should be in between [aA-zZ], don&#39;t use space." title="(ASCII) User name to login. Must be unique. Character should be in between [aA-zZ], don&#39;t use space." class="tooltip-show">
-                                <span class="description-icon"></span>
-                            </a>
-                            <span class="field-validation-valid invalid-input" data-valmsg-for="UserName" data-valmsg-replace="true"></span>
                         </div>
                     </div>
-                </div>
 
-            </div>
-            <div data-dev-slide="1" data-dev-visited='false'>
-                <div class="form-group form-row firstname string-type" data-prop="firstname" data-is-validate="false">
-                    <div class="controls dev-plugin">
-                        <label class="col-md-2 control-label form-label firstname" for="firstname" data-prop="firstname">
-                            First Name
-                            <span class="red">*</span>
-                        </label>
-                        <div class="col-md-10 form-input firstname" data-prop="firstname">
-                            <div class="input-validator-container">
-                                <input class="form-control" data-val="true" data-val-length="The field First Name must be a string with a maximum length of 15." data-val-length-max="15" data-val-minlength="The field First Name must be a string or array type with a minimum length of &#39;1&#39;." data-val-minlength-min="1" data-val-regex="(ASCII)First name shouldn&#39;t contain any space or punctuation or any alphanumeric character or any number." data-val-regex-pattern="^\w+" data-val-required="First name is a required field." id="FirstName" name="FirstName" placeholder="First Name*" title="First Name*" type="text" value="" />
-                                <div class="validator-container">
-                                    <div class="validator"></div>
+                </div>
+                <div data-dev-slide="1" data-dev-visited='false'>
+                    <div class="form-group form-row firstname string-type" data-prop="firstname" data-is-validate="false">
+                        <div class="controls dev-plugin">
+                            <label class="col-md-2 control-label form-label firstname" for="firstname" data-prop="firstname">
+                                First Name
+                                <span class="red">*</span>
+                            </label>
+                            <div class="col-md-10 form-input firstname" data-prop="firstname">
+                                <div class="input-validator-container">
+                                    <input class="form-control" data-submit-method="post" data-val="true" data-val-length="The field First Name must be a string with a maximum length of 15." data-val-length-max="15" data-val-minlength="The field First Name must be a string or array type with a minimum length of &#39;1&#39;." data-val-minlength-min="1" data-val-regex="(ASCII)First name shouldn&#39;t contain any space or punctuation or any alphanumeric character or any number." data-val-regex-pattern="^\w+" data-val-required="First name is a required field." id="FirstName" name="FirstName" placeholder="First Name*" title="First Name*" type="text" value="" />
+                                    <div class="validator-container">
+                                        <div class="validator"></div>
+                                    </div>
                                 </div>
+                                <a data-toggle="tooltip" data-original-title="(ASCII) Character should be in between [aA-zZ], don&#39;t use space." title="(ASCII) Character should be in between [aA-zZ], don&#39;t use space." class="tooltip-show">
+                                    <span class="description-icon"></span>
+                                </a>
+                                <span class="field-validation-valid invalid-input" data-valmsg-for="FirstName" data-valmsg-replace="true"></span>
                             </div>
-                            <a data-toggle="tooltip" data-original-title="(ASCII) Character should be in between [aA-zZ], don&#39;t use space." title="(ASCII) Character should be in between [aA-zZ], don&#39;t use space." class="tooltip-show">
-                                <span class="description-icon"></span>
-                            </a>
-                            <span class="field-validation-valid invalid-input" data-valmsg-for="FirstName" data-valmsg-replace="true"></span>
                         </div>
                     </div>
-                </div>
 
 
-                <div class="form-group form-row lastname string-type" data-prop="lastname" data-is-validate="false">
-                    <div class="controls dev-plugin">
-                        <label class="col-md-2 control-label form-label lastname" for="lastname" data-prop="lastname">
-                            Last Name
-                            <span class="red">*</span>
-                        </label>
-                        <div class="col-md-10 form-input lastname" data-prop="lastname">
-                            <div class="input-validator-container">
-                                <input class="form-control" data-val="true" data-val-length="The field Last Name must be a string with a maximum length of 15." data-val-length-max="15" data-val-minlength="The field Last Name must be a string or array type with a minimum length of &#39;1&#39;." data-val-minlength-min="1" data-val-regex="(ASCII)Last name shouldn&#39;t contain any space or punctuation or any alphanumeric character or any number." data-val-regex-pattern="^\w+$" data-val-required="Last name is a required field." id="LastName" name="LastName" placeholder="Last Name*" title="Last Name*" type="text" value="" />
-                                <div class="validator-container">
-                                    <div class="validator"></div>
+                    <div class="form-group form-row lastname string-type" data-prop="lastname" data-is-validate="false">
+                        <div class="controls dev-plugin">
+                            <label class="col-md-2 control-label form-label lastname" for="lastname" data-prop="lastname">
+                                Last Name
+                                <span class="red">*</span>
+                            </label>
+                            <div class="col-md-10 form-input lastname" data-prop="lastname">
+                                <div class="input-validator-container">
+                                    <input class="form-control" data-submit-method="post" data-val="true" data-val-length="The field Last Name must be a string with a maximum length of 15." data-val-length-max="15" data-val-minlength="The field Last Name must be a string or array type with a minimum length of &#39;1&#39;." data-val-minlength-min="1" data-val-regex="(ASCII)Last name shouldn&#39;t contain any space or punctuation or any alphanumeric character or any number." data-val-regex-pattern="^\w+$" data-val-required="Last name is a required field." id="LastName" name="LastName" placeholder="Last Name*" title="Last Name*" type="text" value="" />
+                                    <div class="validator-container">
+                                        <div class="validator"></div>
+                                    </div>
                                 </div>
+                                <a data-toggle="tooltip" data-original-title="(ASCII) Character should be in between [aA-zZ], don&#39;t use space." title="(ASCII) Character should be in between [aA-zZ], don&#39;t use space." class="tooltip-show">
+                                    <span class="description-icon"></span>
+                                </a>
+                                <span class="field-validation-valid invalid-input" data-valmsg-for="LastName" data-valmsg-replace="true"></span>
                             </div>
-                            <a data-toggle="tooltip" data-original-title="(ASCII) Character should be in between [aA-zZ], don&#39;t use space." title="(ASCII) Character should be in between [aA-zZ], don&#39;t use space." class="tooltip-show">
-                                <span class="description-icon"></span>
-                            </a>
-                            <span class="field-validation-valid invalid-input" data-valmsg-for="LastName" data-valmsg-replace="true"></span>
                         </div>
                     </div>
+
                 </div>
-
-            </div>
-            <div data-dev-slide="0" data-dev-visited='false'>
+                <div data-dev-slide="0" data-dev-visited='false'>
 
 
-                <div class="form-group form-row email emailaddress-type" data-type="emailaddress" data-prop="email" data-is-validate="false">
-                    <div class="controls dev-plugin">
-                        <label class="col-md-2 control-label form-label email" for="email" data-prop="email">
-                            Email Address<span class="red">*</span>
-                        </label>
-                        <div class="col-md-10 form-input email" data-prop="email">
-                            <div class="input-validator-container">
+                    <div class="form-group form-row email emailaddress-type" data-type="emailaddress" data-prop="email" data-is-validate="false">
+                        <div class="controls dev-plugin">
+                            <label class="col-md-2 control-label form-label email" for="email" data-prop="email">
+                                Email Address<span class="red">*</span>
+                            </label>
+                            <div class="col-md-10 form-input email" data-prop="email">
+                                <div class="input-validator-container">
+                                    <span class="inner-addon left-addon">
+                                        <i class="fa fa-envelope-o"></i>
+                                        <input class="form-control" data-submit-method="post" data-val="true" data-val-email="The Email Address field is not a valid e-mail address." data-val-required="(ASCII) Email address is a required field." id="Email" name="Email" placeholder="Email Address*" title="Email Address*" type="email" value="" />
+                                    </span>
+                                    <div class="validator-container">
+                                        <div class="validator"></div>
+                                    </div>
+                                </div>
+                                <a data-toggle="tooltip" data-original-title="(ASCII)A valid email address is required." title="(ASCII)A valid email address is required." class="tooltip-show">
+                                    <span class="description-icon"></span>
+                                </a>
+                                <span class="field-validation-valid invalid-input" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group form-row password password-type" data-type="password" data-prop="password">
+                        <div class="controls dev-plugin">
+                            <label class="col-md-2 control-label form-label password" for="password" data-prop="password">
+                                Password<span class="red">*</span>
+                            </label>
+                            <div class="col-md-10 form-input password">
                                 <span class="inner-addon left-addon">
-                                    <i class="fa fa-envelope-o"></i>
-                                    <input class="form-control" data-val="true" data-val-email="The Email Address field is not a valid e-mail address." data-val-required="(ASCII) Email address is a required field." id="Email" name="Email" placeholder="Email Address*" title="Email Address*" type="email" value="" />
+                                    <i class="fa fa-key"></i>
+                                    <input class="form-control" data-submit-method="post" data-val="true" data-val-length="The Password must be at least 6 characters long." data-val-length-max="100" data-val-length-min="6" data-val-minlength="The field Password must be a string or array type with a minimum length of &#39;6&#39;." data-val-minlength-min="6" data-val-required="(ASCII) Password is a required field." id="Password" name="Password" placeholder="Password*" title="Password*" type="password" value="" />
                                 </span>
-                                <div class="validator-container">
-                                    <div class="validator"></div>
+                                <a data-toggle="tooltip" data-original-title="(ASCII)Minimum 6 digit, no other restriction." title="(ASCII)Minimum 6 digit, no other restriction." class="tooltip-show">
+                                    <span class="description-icon"></span>
+                                </a>
+                                <span class="field-validation-valid invalid-input" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group form-row confirmpassword password-type" data-type="password" data-prop="confirmpassword">
+                        <div class="controls dev-plugin">
+                            <label class="col-md-2 control-label form-label confirmpassword" for="confirmpassword" data-prop="confirmpassword">
+                                Confirm password<span class="red">*</span>
+                            </label>
+                            <div class="col-md-10 form-input confirmpassword">
+                                <span class="inner-addon left-addon">
+                                    <i class="fa fa-key"></i>
+                                    <input class="form-control" data-submit-method="post" data-val="true" data-val-equalto="The password and confirmation password do not match." data-val-equalto-other="*.Password" data-val-required="(ASCII) Confirm password is a required field." id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm password*" title="Confirm password*" type="password" value="" />
+                                </span>
+                                <a data-toggle="tooltip" data-original-title="Confirm password should match the password given above." title="Confirm password should match the password given above." class="tooltip-show">
+                                    <span class="description-icon"></span>
+                                </a>
+                                <span class="field-validation-valid invalid-input" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div data-dev-slide="3" data-dev-visited='false'>
+                    <div class="form-group form-row dateofbirth date-type" data-type="date" data-prop="dateofbirth">
+                        <div class="controls dev-plugin">
+                            <label class="col-md-2 control-label form-label  dateofbirth" for="dateofbirth" data-prop="dateofbirth">
+                                Date of Birth
+                                <span class="red">*</span>
+                            </label>
+                            <div class="col-md-10 form-input dateofbirth" data-prop="dateofbirth">
+                                <div class='input-group datepicker-start inline form-input dateofbirth' data-prop="dateofbirth">
+                                    <input class="form-control date-input" data-date-format="DD/MMM/YYYY hh:mm a" data-val="true" data-val-date="The field Date of Birth must be a date." data-val-required="Please select your verified age." id="DateOfBirth" name="DateOfBirth" placeholder="Date of Birth*" title="Date of Birth*" type="text" value="" />                <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
                                 </div>
+                                <a data-toggle="tooltip" data-original-title="If you do not use verified date, our lawsuit could ban you." title="If you do not use verified date, our lawsuit could ban you." class="tooltip-show inline">
+                                    <span class="description-icon"></span>
+                                </a>
+                                <span class="field-validation-valid invalid-input break-line" data-valmsg-for="DateOfBirth" data-valmsg-replace="true"></span>
                             </div>
-                            <a data-toggle="tooltip" data-original-title="(ASCII)A valid email address is required." title="(ASCII)A valid email address is required." class="tooltip-show">
-                                <span class="description-icon"></span>
-                            </a>
-                            <span class="field-validation-valid invalid-input" data-valmsg-for="Email" data-valmsg-replace="true"></span>
                         </div>
                     </div>
                 </div>
-
-
-                <div class="form-group form-row password password-type" data-type="password" data-prop="password">
-                    <div class="controls dev-plugin">
-                        <label class="col-md-2 control-label form-label password" for="password" data-prop="password">
-                            Password<span class="red">*</span>
-                        </label>
-                        <div class="col-md-10 form-input password">
-                            <span class="inner-addon left-addon">
-                                <i class="fa fa-key"></i>
-                                <input class="form-control" data-val="true" data-val-length="The Password must be at least 6 characters long." data-val-length-max="100" data-val-length-min="6" data-val-minlength="The field Password must be a string or array type with a minimum length of &#39;6&#39;." data-val-minlength-min="6" data-val-required="(ASCII) Password is a required field." id="Password" name="Password" placeholder="Password*" title="Password*" type="password" value="" />
-                            </span>
-                            <a data-toggle="tooltip" data-original-title="(ASCII)Minimum 6 digit, no other restriction." title="(ASCII)Minimum 6 digit, no other restriction." class="tooltip-show">
-                                <span class="description-icon"></span>
-                            </a>
-                            <span class="field-validation-valid invalid-input" data-valmsg-for="Password" data-valmsg-replace="true"></span>
-                        </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="submit" class="btn btn-success">
+                            <i class="glyphicon glyphicon-user"></i>
+                            Register
+                        </button>
                     </div>
                 </div>
-
-
-
-                <div class="form-group form-row confirmpassword password-type" data-type="password" data-prop="confirmpassword">
-                    <div class="controls dev-plugin">
-                        <label class="col-md-2 control-label form-label confirmpassword" for="confirmpassword" data-prop="confirmpassword">
-                            Confirm password<span class="red">*</span>
-                        </label>
-                        <div class="col-md-10 form-input confirmpassword">
-                            <span class="inner-addon left-addon">
-                                <i class="fa fa-key"></i>
-                                <input class="form-control" data-val="true" data-val-equalto="The password and confirmation password do not match." data-val-equalto-other="*.Password" data-val-required="(ASCII) Confirm password is a required field." id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm password*" title="Confirm password*" type="password" value="" />
-                            </span>
-                            <a data-toggle="tooltip" data-original-title="Confirm password should match the password given above." title="Confirm password should match the password given above." class="tooltip-show">
-                                <span class="description-icon"></span>
-                            </a>
-                            <span class="field-validation-valid invalid-input" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true"></span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <div data-dev-slide="3" data-dev-visited='false'>
-                <div class="form-group form-row dateofbirth date-type" data-type="date" data-prop="dateofbirth">
-                    <div class="controls dev-plugin">
-                        <label class="col-md-2 control-label form-label  dateofbirth" for="dateofbirth" data-prop="dateofbirth">
-                            Date of Birth
-                            <span class="red">*</span>
-                        </label>
-                        <div class="col-md-10 form-input dateofbirth" data-prop="dateofbirth">
-                            <div class='input-group datepicker-start inline form-input dateofbirth' data-prop="dateofbirth">
-                                <input class="form-control date-input" data-date-format="DD/MMM/YYYY hh:mm a" data-val="true" data-val-date="The field Date of Birth must be a date." data-val-required="Please select your verified age." id="DateOfBirth" name="DateOfBirth" placeholder="Date of Birth*" title="Date of Birth*" type="text" value="" />                <span class="input-group-addon">
-                                    <span class="fa fa-calendar"></span>
-                                </span>
-                            </div>
-                            <a data-toggle="tooltip" data-original-title="If you do not use verified date, our lawsuit could ban you." title="If you do not use verified date, our lawsuit could ban you." class="tooltip-show inline">
-                                <span class="description-icon"></span>
-                            </a>
-                            <span class="field-validation-valid invalid-input break-line" data-valmsg-for="DateOfBirth" data-valmsg-replace="true"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <button type="submit" class="btn btn-success">
-                        <i class="glyphicon glyphicon-user"></i>
-                        Register
-                    </button>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
         <hr />
         <footer class="text-center">
             <p>

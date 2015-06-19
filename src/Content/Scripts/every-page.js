@@ -66,8 +66,9 @@ $.genericPage = function() {
         var $inputs = $fromx.find("input");
         //$inputs.valid();
         //$.serverValidate();
+        var $processForm = $.byId("process-form");
 
-        $inputs.serverValidate();
+        $processForm.serverValidate();
     });
 
   
