@@ -59,15 +59,18 @@ $.genericPage = function() {
         sideBySide: true //show the date and time picker side by side
 
     });
-    var $from = $.byId("register-form");
-    $from.submit(function (e) {
+    $.byId("register-form").submit(function (e) {
         e.preventDefault();
-        var inputs = $form.find("input").valid();
+        var $fromx = $(this);
+
+        var $inputs = $fromx.find("input");
+        //$inputs.valid();
+        //$.serverValidate();
+
+        $inputs.serverValidate();
     });
 
-    $from.serverValidate({
-        propertyName: "a custom value"
-    });
+  
 }
 
 
