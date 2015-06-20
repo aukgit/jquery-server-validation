@@ -131,11 +131,13 @@
             });
         },
         concatAdditionalFields: function ($input) {
-            var addFields = this.additionalFields;
-            return addFields.push({
-                name: $input.att('name'),
-                value: $input.att('value')
-            });
+            var addFields = $selfContainer.additionalFields.slice();
+            var fields = {
+                name: $input.attr('name'),
+                value: $input.val()
+            };
+            addFields.push(fields);
+            return addFields;
         },
         getSubmitMethod: function ($input) {
             /// <summary>
@@ -143,7 +145,7 @@
             /// </summary>
             /// <param name="$div"></param>
             /// <returns type=""></returns>
-            var attrs = this.settings.attributes;
+            var attrs = $selfContainer.settings.attributes;
             return $input.attr(attrs.submitMethod);
         },
         sendRequest: function ($input, url, sendingFields) {
