@@ -159,12 +159,39 @@
                 if (isInTestingMode) {
                     console.log(response);
                 }
-                self.validResponse(response);
+                self.processResponse(response);
             }).fail(function (jqXHR, textStatus, exceptionMessage) {
                 console.log("Request failed: " + exceptionMessage);
             }).always(function () {
                 console.log("complete");
             });
+        },
+        showSpinner: function() {
+            
+        },
+        processResponse: function (response) {
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="response"></param>
+            /// <returns type=""></returns>
+            //response: {
+            //        message: "Field is valid.",
+            //        isValid: true,
+            //        isError: false,
+            //        errorCode: null,
+            //        errorMessage: null
+            //}
+            var $self = $selfContainer;
+            var self = this;
+
+            var responseFormat = $self.settings.response;
+            response = $.extend({}, responseFormat, response);
+            if (response.isValid) {
+                self.validResponse(response);
+            } else {
+                self.inValidResponse(response);
+            }
         },
         validResponse: function (response) {
 
