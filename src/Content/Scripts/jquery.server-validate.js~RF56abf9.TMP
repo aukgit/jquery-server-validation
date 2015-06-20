@@ -21,10 +21,7 @@
 
     "use strict";
     var pluginName = "serverValidate",
-        $divContainers,
-        settings,
-        additionalFields,
-        $selfContainer = null,
+    $divContainer,settings, additionalFields,
     defaults = {
         selectors: {
             divContainer: ".form-row",
@@ -67,7 +64,7 @@
 
     function processAdditionalFields($elementContainer) {
         var addFields = [];
-        var selectors = $elementContainer.settings.selectors.additionalFields;
+        var selectors = this.settings.selectors.additionalFields;
         for (var i = 0; i < selectors.length; i++) {
             var selector = selectors[i];
             var $element = $elementContainer.find(selector);
@@ -103,24 +100,20 @@
             /// </summary>
             /// <param name="$div"></param>
             /// <returns type=""></returns>
-            var $self = $selfContainer;
-            var attrs = $self.settings.attributes;
+            var attrs = this.settings.attributes;
             return $div.attr(attrs.isValidate) === 'true';
         },
         getInput: function ($div) {
             return $div.find("input");
         },
         getUrl: function ($input) {
-            var $self = $selfContainer;
-
-            var attrs = $self.settings.attributes;
+            var attrs = this.settings.attributes;
             return $input.attr(attrs.url);
         },
         processDiv: function ($div) {
-            //var $self = $selfContainer;
             var $input = this.getInput($div);
             var url = this.getUrl($input);
-            this.inputProcessWithBlurEvent($input, url);
+
         },
         inputProcessWithBlurEvent: function ($input, url) {
             var self = this;
@@ -185,17 +178,15 @@
         /// <param name="options"></param>
         /// <returns type=""></returns>
         var $elementContainer = this;
-        $selfContainer = this;
-        if ($elementContainer.isInit !== true) {
-            this.settings = $.extend({}, defaults, options);
-            var selectors = this.settings.selectors;
-            this.$divContainers = $elementContainer.find(selectors.divContainer);
-            this.additionalFields = processAdditionalFields($elementContainer);
-            this.isInit = true;
-        }
-        for (var i = 0; i < this.$divContainers.length; i++) {
-            var $divElement = $(this.$divContainers[i]);
-            new plugin($divElement, options);
+
+        settings = $.extend({}, defaults, options);
+        var selectors = this.settings.selectors;
+        $divContainers = $elementContainer.find(selectors.divContainer);
+        additionalFields = processAdditionalFields($elementContainer);
+
+        for (var i = 0; i < $divContainers.length; i++) {
+            var $divElement = $($divContainers[i]);
+            plugin($divElement, options);
         }
     };
 
