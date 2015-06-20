@@ -21,33 +21,34 @@
 
     "use strict";
     var pluginName = "serverValidate",
-        defaults = {
-            selectors: {
-                divContainer: ".form-row",
-                validatorContainer: ".validator-container",
-                validator: ".validator",
-                additionalFields: [
-                    "[name=__RequestVerificationToken]"
-                ]
-            },
-            attributes: {
-                url: "data-url",
-                isValidate: "data-is-validate",
-                submitMethod: "data-submit-method"
-            },
-            icons: {
-                invalid: "fa fa-times",
-                valid: "fa fa-check",
-                loading: "fa fa-refresh"
-            },
-            response: {
-                message: "Field is valid.",
-                isValid: true,
-                isError: false,
-                errorCode: null,
-                errorMessage: null
-            }
-        };
+    $divContainer,settings, additionalFields,
+    defaults = {
+        selectors: {
+            divContainer: ".form-row",
+            validatorContainer: ".validator-container",
+            validator: ".validator",
+            additionalFields: [
+                "[name=__RequestVerificationToken]"
+            ]
+        },
+        attributes: {
+            url: "data-url",
+            isValidate: "data-is-validate",
+            submitMethod: "data-submit-method"
+        },
+        icons: {
+            invalid: "fa fa-times",
+            valid: "fa fa-check",
+            loading: "fa fa-refresh"
+        },
+        response: {
+            message: "Field is valid.",
+            isValid: true,
+            isError: false,
+            errorCode: null,
+            errorMessage: null
+        }
+    };
 
     // The actual plugin constructor
     function plugin($divElement) {
@@ -188,7 +189,7 @@
 
         for (var i = 0; i < $divContainers.length; i++) {
             var $divElement = $($divContainers[i]);
-            new plugin($divElement, options);
+            plugin($divElement, options);
         }
     };
 
