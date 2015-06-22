@@ -24,6 +24,7 @@ namespace SampleApp.Controllers {
         }
         public JsonResult Request() {
             Thread.Sleep(2000);
+            
             var x = new {
                 message = "Field is valid.",
                 isValid = true,
@@ -35,7 +36,7 @@ namespace SampleApp.Controllers {
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public JsonResult Request(int id) {
             Thread.Sleep(id);
             var x = new {

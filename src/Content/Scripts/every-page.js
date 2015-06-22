@@ -59,20 +59,26 @@ $.genericPage = function() {
         sideBySide: true //show the date and time picker side by side
 
     });
+    var $urlInput = $.byId("get-url");
+    var $processForm = $.byId("process-form");
+
+    var $inputs = $processForm.find("input");
+    $inputs.attr('data-url', $urlInput.val());
+    var $formRows = $processForm.find(".form-row:first");
+
+    $formRows.attr("data-is-validate", "true");
+
+    $processForm.serverValidate();
+
+
+
     $.byId("register-form").submit(function (e) {
         e.preventDefault();
         var $fromx = $(this);
-        var $urlInput = $.byId("get-url");
-
-        var $inputs = $fromx.find("input");
-        $inputs.attr('data-url', $urlInput.val());
-        var $formRows = $fromx.find(".form-row");
-        $formRows.attr("data-is-validate", "true");
+  
         //$inputs.valid();
         //$.serverValidate();
-        var $processForm = $.byId("process-form");
-
-        $processForm.serverValidate();
+    
     });
 
   
