@@ -299,7 +299,6 @@
             $validator.append(html);
             var $spinner = $.byId(finalId);
             $spinner.tooltip();
-
             return $spinner;
         },
         getValidator: function() {
