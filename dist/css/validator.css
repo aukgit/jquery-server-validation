@@ -23,6 +23,14 @@
   width: 294px;
   width: 29.4rem;
 }
+.validator-container {
+  position: relative;
+}
+.validator {
+  position: absolute;
+  top: -26px;
+  right: 8px;
+}
 .input-validator-container {
   display: inline-block;
   width: 100%;

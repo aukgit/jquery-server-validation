@@ -175,6 +175,7 @@
             //var $self = $selfContainer;
             var $input = this.getInput($div);
             var url = this.getUrl($input);
+            this.showSpinner($input);
             this.inputProcessWithBlurEvent($div, $input, url);
         },
         setCurrentTextForNexttimeChecking: function ($input) {
