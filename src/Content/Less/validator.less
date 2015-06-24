@@ -25,19 +25,38 @@
     }
 }
 
-.validator-container {
+/*.validator-container {
     position: relative;
+}*/
+
+
+.validator-container {
+    display: block;
 }
 
-.validator {
+/*.validator {
     position: absolute;
     top: -26px;
     right: 8px;
+}*/
+.validator {
+    display: inherit;
 }
 
+.validation-icon-wrapper {
+    position: static;
+    display: inherit;
+    margin-top: -26px;
+    margin-left: 273px;
+}
 
 .input-validator-container {
     display: inline-block;
     width: 100%;
     .max-width(@inputs-max-width);
+}
+
+
+.relative {
+    position: relative;
 }

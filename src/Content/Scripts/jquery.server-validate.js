@@ -58,9 +58,9 @@
             submitMethod: "data-submit-method"
         },
         icons: {
-            invalid: "fa fa-times",
-            valid: "fa fa-check",
-            spinner: "fa fa-refresh fa-spin-custom"
+            invalid: "validation-icon-invalid fa fa-times",
+            valid: "validation-icon-valid fa fa-check",
+            spinner: "validation-icon-spinner fa fa-refresh fa-spin-custom"
         },
         iconsIdPrefixes: {
             invalid: "invalid-mark-",
@@ -307,14 +307,14 @@
                 $validator = this.getValidator(),
                 finalId = idPrefix + id;
 
-            var html = "<a data-toggle='tooltip' id='" + finalId + "'" +
+            var html = "<div class='validation-icon-wrapper'><a data-toggle='tooltip' id='" + finalId + "'" +
                "title='" + toolTipmessage + "' " +
                "data-original-title='" + toolTipmessage + "' " +
                "class='tooltip-show'>" +
                     "<span data-display='" + toolTipmessage + "' " +
                         "class='" + icon + "' " +
                         "title='" + toolTipmessage + "'></span>" +
-                        "</a>";
+                        "</a></div>";
             $validator.append(html);
             var $created = $.byId(finalId);
             $created.tooltip();
@@ -366,9 +366,9 @@
             return this.$spinner;
         },
         showSpinner: function ($input) {
-            var $spinner = this.getSpinner();
+            var $spinner = this.getSpinner($input);
             if ($spinner.length === 0) {
-                $spinner = this.createSpinnerIcon($div, $input);
+                $spinner = this.createSpinnerIcon($input);
             }
             $spinner.show("slow");
         },
@@ -389,7 +389,7 @@
         },
         
         showValidIcon: function ($input, message) {
-            var $markIcon = this.getValidIcon();
+            var $markIcon = this.getValidIcon($input);
             if ($markIcon.length === 0) {
                 $markIcon = this.createValidIcon($input, message);
             }

@@ -23,18 +23,33 @@
   width: 294px;
   width: 29.4rem;
 }
+/*.validator-container {
+    position: relative;
+}*/
 .validator-container {
-  position: relative;
+  display: block;
 }
+/*.validator {
+    position: absolute;
+    top: -26px;
+    right: 8px;
+}*/
 .validator {
-  position: absolute;
-  top: -26px;
-  right: 8px;
+  display: inherit;
+}
+.validation-icon-wrapper {
+  position: static;
+  display: inherit;
+  margin-top: -26px;
+  margin-left: 273px;
 }
 .input-validator-container {
   display: inline-block;
   width: 100%;
   max-width: 294px;
   max-width: 29.4rem;
+}
+.relative {
+  position: relative;
 }
 /*# sourceMappingURL=validator.css.map */
