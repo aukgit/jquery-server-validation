@@ -75,9 +75,9 @@
             errorMessage: null
         },
         events: {
-            beforeSendingRequest: null,
-            responseReceived: null,
-            responseProcessed: null
+            beforeSendingRequest: function($div,$input, url){},
+            responseReceived: function ($div, $input, response) { },
+            responseProcessed: function ($div, $input, response) { }
         }
     };
 
@@ -185,8 +185,11 @@
             //var $self = $selfContainer;
             var $input = this.getInput($div);
             var url = this.getUrl();
-            this.showSpinner($input);
+            //this.test();
             this.inputProcessWithBlurEvent($div, $input, url);
+        },
+        test: function () {
+            this.showSpinner($input);
         },
         setCurrentTextForNexttimeChecking: function ($input) {
             $input.attr("data-previous-submit", $input.val());
@@ -248,7 +251,12 @@
             var method = this.getSubmitMethod($input);
             var self = this;
             var isInTestingMode = self.isDebugging;
+
+            //icons show/hide
             this.showSpinner($input);
+            this.hideInvalidIcon($input);
+            this.hideValidIcon($input);
+
             self.markAsProcessing($div, true);
             self.setCurrentTextForNexttimeChecking($input);
             jQuery.ajax({
@@ -263,8 +271,8 @@
                 }
                 self.markAsProcessing($div, false);
                 self.processResponse($input, response);
-                self.hideSpinner();
-
+                //icons show/hide
+                self.hideSpinner($input);
             }).fail(function (jqXHR, textStatus, exceptionMessage) {
                 console.log("Request failed: " + exceptionMessage + ". Url : " + url);
             });
@@ -307,7 +315,7 @@
                 $validator = this.getValidator(),
                 finalId = idPrefix + id;
 
-            var html = "<div class='validation-icon-wrapper'><a data-toggle='tooltip' id='" + finalId + "'" +
+            var html = "<div class='validation-icon-wrapper' id='wrapper-" + finalId + "'><a data-toggle='tooltip' id='" + finalId + "'" +
                "title='" + toolTipmessage + "' " +
                "data-original-title='" + toolTipmessage + "' " +
                "class='tooltip-show'>" +
@@ -329,7 +337,7 @@
         },
         createInvalidIcon: function ($input, message) {
             var icons = this.getIcons(),
-                icon = icons.valid,
+                icon = icons.invalid,
                 ids = this.getIdPrefixes(),
                 prefixId = ids.invalid;
             return this.createIcons($input, icon, message, prefixId);
@@ -344,6 +352,9 @@
 
             return this.createIcons($input, spinnerIcon, requesting, prefixId);
         },
+        getWrapperPrefix : function() {
+            return "wrapper-";
+        },
         getValidator: function () {
             /// <summary>
             /// Returns validator div
@@ -356,25 +367,33 @@
         },
         getSpinner: function ($input) {
             /// <summary>
-            /// Get spinner a tag.
+            /// Get spinner's div tag.
             /// </summary>
             if (this.isEmpty(this.$spinner)) {
                 var ids = this.getIdPrefixes(),
-                    id = ids.spinner + this.getInputNameOrId($input);
+                    id = this.getWrapperPrefix() + // wrapper-
+                         ids.spinner +             // icon 
+                         this.getInputNameOrId($input);
                 this.$spinner = $.byId(id);
             }
             return this.$spinner;
+        },
+        animateOn: function($object) {
+            $object.fadeIn("slow");
+        },
+        animateOff: function($object) {
+            $object.hide();
         },
         showSpinner: function ($input) {
             var $spinner = this.getSpinner($input);
             if ($spinner.length === 0) {
                 $spinner = this.createSpinnerIcon($input);
             }
-            $spinner.show("slow");
+            this.animateOn($spinner);
         },
-        hideSpinner: function () {
-            var $spinner = this.getSpinner();
-            $spinner.hide("slow");
+        hideSpinner: function ($input) {
+            var $spinner = this.getSpinner($input);
+            this.animateOff($spinner);
         },
         getValidIcon: function ($input) {
             /// <summary>
@@ -382,7 +401,9 @@
             /// </summary>
             if (this.isEmpty(this.$validMarkIcon)) {
                 var ids = this.getIdPrefixes(),
-                    id = ids.valid + this.getInputNameOrId($input);
+                    id = this.getWrapperPrefix() + // wrapper-
+                         ids.valid +
+                         this.getInputNameOrId($input);
                 this.$validMarkIcon = $.byId(id);
             }
             return this.$validMarkIcon;
@@ -394,11 +415,11 @@
                 $markIcon = this.createValidIcon($input, message);
             }
             this.setMessageOnIcons($markIcon, message);
-            $markIcon.show("slow");
+            this.animateOn($markIcon);
         },
-        hideValidIcon: function () {
-            var $icon = this.getValidIcon();
-            $icon.hide("slow");
+        hideValidIcon: function ($input) {
+            var $icon = this.getValidIcon($input);
+            this.animateOff($icon);
         },
         //
         getInvalidIcon: function ($input) {
@@ -407,23 +428,25 @@
             /// </summary>
             if (this.isEmpty(this.$invalidMarkIcon)) {
                 var ids = this.getIdPrefixes(),
-                    id = ids.invalid + this.getInputNameOrId($input);
+                    id = this.getWrapperPrefix() + // wrapper-
+                         ids.invalid +
+                         this.getInputNameOrId($input);
                 this.$invalidMarkIcon = $.byId(id);
             }
             return this.$invalidMarkIcon;
         },
         
         showInvalidIcon: function ($input, message) {
-            var $markIcon = this.getInvalidIcon();
+            var $markIcon = this.getInvalidIcon($input);
             if ($markIcon.length === 0) {
                 $markIcon = this.createInvalidIcon($input, message);
             }
             this.setMessageOnIcons($markIcon, message);
-            $markIcon.show("slow");
+            this.animateOn($markIcon);
         },
-        hideInvalidIcon: function () {
-            var $icon = this.getInvalidIcon();
-            $icon.hide("slow");
+        hideInvalidIcon: function ($input) {
+            var $icon = this.getInvalidIcon($input);
+            this.animateOff($icon);
         },
         processResponse: function ($input, response) {
             /// <summary>
@@ -478,6 +501,7 @@
             //        errorCode: null,
             //        errorMessage: null
             //}
+            this.showInvalidIcon($input, response.errorCode + " : " + response.errorMessage);
         }
     });
 

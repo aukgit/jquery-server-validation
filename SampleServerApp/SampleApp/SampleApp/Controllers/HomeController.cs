@@ -48,5 +48,19 @@ namespace SampleApp.Controllers {
             };
             return Json(x, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public JsonResult RequestInvalid(int id) {
+            Thread.Sleep(id);
+            var x = new {
+                message = "Field is invalid.",
+                isValid = false,
+                isError = true,
+                errorCode = "404",
+                errorMessage = "Field is invalid"
+            };
+            return Json(x, JsonRequestBehavior.AllowGet);
+        }
     }
 }

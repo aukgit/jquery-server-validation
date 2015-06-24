@@ -29,6 +29,33 @@
 .validator-container {
   display: block;
 }
+.validator-container [id*='wrapper-invalid-mark-'] .tooltip-inner {
+  background-color: #f91909;
+}
+.validator-container [id*='wrapper-invalid-mark-'] .tooltip-arrow {
+  border-top-color: #f91909;
+}
+.validator-container [id*='wrapper-invalid-mark-'] .fa {
+  color: #f91909;
+}
+.validator-container [id*='wrapper-valid-mark-'] .tooltip-inner {
+  background-color: #1cab1c;
+}
+.validator-container [id*='wrapper-valid-mark-'] .tooltip-arrow {
+  border-top-color: #1cab1c;
+}
+.validator-container [id*='wrapper-valid-mark-'] .fa {
+  color: #1cab1c;
+}
+.validator-container [id*='wrapper-validation-spinner-'] .tooltip-inner {
+  background-color: #0094ff;
+}
+.validator-container [id*='wrapper-validation-spinner-'] .tooltip-arrow {
+  border-top-color: #0094ff;
+}
+.validator-container [id*='wrapper-validation-spinner-'] .fa {
+  color: #0094ff;
+}
 /*.validator {
     position: absolute;
     top: -26px;
@@ -51,5 +78,9 @@
 }
 .relative {
   position: relative;
+}
+.form-group {
+  margin-bottom: 14px;
+  margin-top: 10px;
 }
 /*# sourceMappingURL=validator.css.map */
