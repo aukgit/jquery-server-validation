@@ -35,53 +35,54 @@
         settings,
         additionalFields,
         $selfContainer = null,
-    defaults = {
-        crossDomain: true,
-        multipleRequests: true,
-        checkValidationBeforeSendingRequest: true,
-        dontSendSameRequestTwice: true,
-        disableInputOnValidation: true,
-        messages: {
-            requesting: "Requesting data..."
-        },
-        selectors: {
-            divContainer: ".form-row",
-            validatorContainer: ".validator-container",
-            validator: ".validator",
-            additionalFields: [
-                "[name=__RequestVerificationToken]"
-            ]
-        },
-        attributes: {
-            url: "data-url",
-            isValidate: "data-is-validate",
-            submitMethod: "data-submit-method"
-        },
-        icons: {
-            invalid: "validation-icon-invalid fa fa-times",
-            valid: "validation-icon-valid fa fa-check",
-            spinner: "validation-icon-spinner fa fa-refresh fa-spin-custom",
-            error: "validation-icon-error fa fa-exclamation-circle"
-        },
-        iconsIdPrefixes: {
-            invalid: "invalid-mark-",
-            valid: "valid-mark-",
-            spinner: "validation-spinner-",
-            error: "validation-error-"
-        },
-        response: {
-            message: "Field is valid.",
-            isValid: true,
-            isError: false,
-            errorCode: null,
-            errorMessage: null
-        },
-        events: {
-            beforeSendingRequest: function ($div, $input, url) { },
-            responseReceived: function ($div, $input, response) { },
-            responseProcessed: function ($div, $input, response) { }
-        }
-    };
+        defaults = {
+            crossDomain: true,
+            multipleRequests: true,
+            checkValidationBeforeSendingRequest: true,
+            dontSendSameRequestTwice: true,
+            disableInputOnValidation: true,
+            focusPersistIfNotValid: true,
+            messages: {
+                requesting: "Requesting data..."
+            },
+            selectors: {
+                divContainer: ".form-row",
+                validatorContainer: ".validator-container",
+                validator: ".validator",
+                additionalFields: [
+                    "[name=__RequestVerificationToken]"
+                ]
+            },
+            attributes: {
+                url: "data-url",
+                isValidate: "data-is-validate",
+                submitMethod: "data-submit-method"
+            },
+            icons: {
+                invalid: "validation-icon-invalid fa fa-times",
+                valid: "validation-icon-valid fa fa-check",
+                spinner: "validation-icon-spinner fa fa-refresh fa-spin-custom",
+                error: "validation-icon-error fa fa-exclamation-circle"
+            },
+            iconsIdPrefixes: {
+                invalid: "invalid-mark-",
+                valid: "valid-mark-",
+                spinner: "validation-spinner-",
+                error: "validation-error-"
+            },
+            response: {
+                message: "Field is valid.",
+                isValid: true,
+                isError: false,
+                errorCode: null,
+                errorMessage: null
+            },
+            events: {
+                beforeSendingRequest: function ($div, $input, url) { },
+                responseReceived: function ($div, $input, response) { },
+                responseProcessed: function ($div, $input, response) { }
+            }
+        };
 
     // The actual plugin constructor
     function plugin($divElement) {
@@ -124,6 +125,9 @@
             if (this.isValidForProcessing($divElement)) {
                 this.processDiv($divElement);
             }
+        },
+        getSettings: function () {
+            return $selfContainer.settings;
         },
         isMultipleRequestAllowed: function () {
             return $selfContainer.settings.multipleRequests;
@@ -222,13 +226,23 @@
                         // is input needed to be valid before send the request.
                         isRequstValid = (validationRequires && $inputNew.valid()) || !validationRequires;
 
+                       
+
                         if (isRequstValid) {
                             var fields = self.concatAdditionalFields($inputNew);
                             self.sendRequest($div, $inputNew, url, fields);
                         }
+                        if (self.getSettings().focusPersistIfNotValid) {
+                            self.focusIfnotValid($inputNew);
+                        }
                     }
                 }
             });
+        },
+        focusIfnotValid : function($input) {
+            if ($input.valid() === false) {
+                $input.focus();
+            }
         },
         concatAdditionalFields: function ($input) {
             var addFields = $selfContainer.additionalFields.slice();
@@ -284,7 +298,7 @@
             var $input = this.getInput(),
                 code = jqXHR.status,
                 msg = "";
-            
+
             if (code === 0) {
                 code = 404;
                 textStatus = "Requested url doesn't lead to a valid request.";
@@ -322,7 +336,7 @@
             return id;
         },
         setMessageOnIcons: function ($icon, message) {
-            var $span = $icon.attr("title", message)
+            var $span = $icon.find("a").attr("title", message)
                              .attr("data-original-title", message)
                              .find("span");
             $span.attr("title", message)
@@ -352,7 +366,7 @@
                         "</a></div>";
             $validator.append(html);
             var $created = $.byId(wrapperName + finalId); // get the whole container
-            $created.tooltip();
+            $.byId(finalId).tooltip();
             return $created;
         },
         getWrapperPrefix: function () {
@@ -447,7 +461,14 @@
             }
             return this.$errorIcon;
         },
-        showIcon: function ($input, idPrefix, message) {
+        showOnlyIcon: function ($input, idPrefix, message) {
+            /// <summary>
+            /// Show only that icon and hide all the others.
+            /// </summary>
+            /// <param name="$input"></param>
+            /// <param name="idPrefix"></param>
+            /// <param name="message"></param>
+            /// <returns type=""></returns>
             var ids = this.getIdPrefixes(),
                 $icon = this.getErrorIcon($input);
             this.setMessageOnIcons($icon, message);
@@ -462,13 +483,13 @@
             var $spinner = this.getSpinner($input);
             this.animateOn($spinner);
         },
-        
+
         showInvalidIcon: function ($input, message) {
             var $markIcon = this.getInvalidIcon($input);
             this.setMessageOnIcons($markIcon, message);
             this.animateOn($markIcon);
         },
-     
+
         showValidIcon: function ($input, message) {
             var $markIcon = this.getValidIcon($input);
             this.setMessageOnIcons($markIcon, message);
@@ -496,7 +517,7 @@
         animateOff: function ($object) {
             $object.hide();
         },
-        
+
         processResponse: function ($input, response) {
             /// <summary>
             /// 
@@ -539,7 +560,7 @@
             this.showValidIcon($input, response.message);
             var isDisableInput = this.isDisableInputOnValidation();
             if (isDisableInput) {
-                $input.attr("disable", "disable");
+                $input.attr("disabled", "disabled");
             }
         },
         inValidResponse: function ($input, response) {
