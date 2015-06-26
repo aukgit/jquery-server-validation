@@ -40,7 +40,7 @@
         multipleRequests: true,
         checkValidationBeforeSendingRequest: true,
         dontSendSameRequestTwice: true,
-        disableInputOnValidation : true,
+        disableInputOnValidation: true,
         messages: {
             requesting: "Requesting data..."
         },
@@ -60,12 +60,14 @@
         icons: {
             invalid: "validation-icon-invalid fa fa-times",
             valid: "validation-icon-valid fa fa-check",
-            spinner: "validation-icon-spinner fa fa-refresh fa-spin-custom"
+            spinner: "validation-icon-spinner fa fa-refresh fa-spin-custom",
+            error: "validation-icon-error fa fa-exclamation-circle"
         },
         iconsIdPrefixes: {
             invalid: "invalid-mark-",
             valid: "valid-mark-",
-            spinner: "validation-spinner-"
+            spinner: "validation-spinner-",
+            error: "validation-error-"
         },
         response: {
             message: "Field is valid.",
@@ -75,7 +77,7 @@
             errorMessage: null
         },
         events: {
-            beforeSendingRequest: function($div,$input, url){},
+            beforeSendingRequest: function ($div, $input, url) { },
             responseReceived: function ($div, $input, response) { },
             responseProcessed: function ($div, $input, response) { }
         }
@@ -274,8 +276,29 @@
                 //icons show/hide
                 self.hideSpinner($input);
             }).fail(function (jqXHR, textStatus, exceptionMessage) {
+                self.errorProcess(jqXHR, textStatus, exceptionMessage, url);
                 console.log("Request failed: " + exceptionMessage + ". Url : " + url);
             });
+        },
+        errorProcess: function (jqXHR, textStatus, exceptionMessage, url) {
+            var $input = this.getInput(),
+                code = jqXHR.status,
+                msg = "";
+            
+            if (code === 0) {
+                code = 404;
+                textStatus = "Requested url doesn't lead to a valid request.";
+            }
+            msg = "Code " + code + " : " + textStatus;
+
+            //console.log(jqXHR);
+            //console.log(textStatus);
+            //icons show/hide
+            this.showErrorIcon($input, msg);
+            this.hideInvalidIcon($input);
+            this.hideValidIcon($input);
+            this.hideSpinner($input);
+
         },
         markAsProcessing: function ($div, isProcessing) {
             if (this.isDebugging) {
@@ -307,15 +330,19 @@
         },
         createIcons: function ($input, icon, toolTipmessage, idPrefix) {
             /// <summary>
-            /// Create valid check mark.
+            /// Create icon and return that Icon whole container.
             /// </summary>
-            /// <param name="$div"></param>
-            /// <param name="$input"></param>
+            /// <param name="$input">Specific input, this.$input</param>
+            /// <param name="icon">Icon class to display(mostly the font-awesome icons). Retrieve from this.getIcons()</param>
+            /// <param name="toolTipmessage">Icon's tooltip message.</param>
+            /// <param name="idPrefix">Id prefixes for that icon. For spinner this.getPrefixIds().spiner.</param>
+            /// <returns type="">Returns created icon object.</returns>
             var id = this.getInputNameOrId($input),
                 $validator = this.getValidator(),
+                wrapperName = this.getWrapperPrefix(),
                 finalId = idPrefix + id;
 
-            var html = "<div class='validation-icon-wrapper' id='wrapper-" + finalId + "'><a data-toggle='tooltip' id='" + finalId + "'" +
+            var html = "<div class='validation-icon-wrapper' id='" + wrapperName + finalId + "'><a data-toggle='tooltip' id='" + finalId + "'" +
                "title='" + toolTipmessage + "' " +
                "data-original-title='" + toolTipmessage + "' " +
                "class='tooltip-show'>" +
@@ -324,35 +351,11 @@
                         "title='" + toolTipmessage + "'></span>" +
                         "</a></div>";
             $validator.append(html);
-            var $created = $.byId(finalId);
+            var $created = $.byId(wrapperName + finalId); // get the whole container
             $created.tooltip();
             return $created;
         },
-        createValidIcon: function ($input, message) {
-            var icons = this.getIcons(),
-                icon = icons.valid,
-                ids = this.getIdPrefixes(),
-                prefixId = ids.valid;
-            return this.createIcons($input, icon, message, prefixId);
-        },
-        createInvalidIcon: function ($input, message) {
-            var icons = this.getIcons(),
-                icon = icons.invalid,
-                ids = this.getIdPrefixes(),
-                prefixId = ids.invalid;
-            return this.createIcons($input, icon, message, prefixId);
-        },
-        createSpinnerIcon: function ($input) {
-            var messages = this.getMessages(),
-                requesting = messages.requesting,
-                icons = this.getIcons(),
-                spinnerIcon = icons.spinner,
-                ids = this.getIdPrefixes(),
-                prefixId = ids.spinner;
-
-            return this.createIcons($input, spinnerIcon, requesting, prefixId);
-        },
-        getWrapperPrefix : function() {
+        getWrapperPrefix: function () {
             return "wrapper-";
         },
         getValidator: function () {
@@ -365,61 +368,42 @@
             }
             return this.$validator;
         },
-        getSpinner: function ($input) {
+        getCachedIcon: function ($input, iconIdPrefix) {
             /// <summary>
-            /// Get spinner's div tag.
+            /// Returns the icon for that specific icon id prefix
+            /// If not exist then create one and then return.
             /// </summary>
-            if (this.isEmpty(this.$spinner)) {
-                var ids = this.getIdPrefixes(),
-                    id = this.getWrapperPrefix() + // wrapper-
-                         ids.spinner +             // icon 
-                         this.getInputNameOrId($input);
-                this.$spinner = $.byId(id);
+            /// <param name="$input"></param>
+            /// <param name="iconIdPrefix"></param>
+            /// <returns type=""></returns>
+            var ids = this.getIdPrefixes(),
+                id = this.getWrapperPrefix() + // wrapper-
+                    iconIdPrefix + // icon 
+                    this.getInputNameOrId($input),
+                cachedId = "$" + id;
+            var $existingIcon = this[cachedId];
+            if (this.isEmpty($existingIcon)) {
+                // doesn't have the cache icon.
+                // icon needs to be created.
+                var messages = this.getMessages(),
+                    msg = "", // no message except for spinner, others will come from server.
+                    icons = this.getIcons(),
+                    iconClass = "";
+                // set icon classes based on the given id.
+                if (iconIdPrefix === ids.spinner) {
+                    iconClass = icons.spinner;
+                    msg = messages.requesting;
+                } else if (iconIdPrefix === ids.valid) {
+                    iconClass = icons.valid;
+                } else if (iconIdPrefix === ids.invalid) {
+                    iconClass = icons.invalid;
+                } else if (iconIdPrefix === ids.error) {
+                    iconClass = icons.error;
+                }
+                $existingIcon = this.createIcons($input, iconClass, msg, iconIdPrefix);
+                this[cachedId] = $existingIcon;
             }
-            return this.$spinner;
-        },
-        animateOn: function($object) {
-            $object.fadeIn("slow");
-        },
-        animateOff: function($object) {
-            $object.hide();
-        },
-        showSpinner: function ($input) {
-            var $spinner = this.getSpinner($input);
-            if ($spinner.length === 0) {
-                $spinner = this.createSpinnerIcon($input);
-            }
-            this.animateOn($spinner);
-        },
-        hideSpinner: function ($input) {
-            var $spinner = this.getSpinner($input);
-            this.animateOff($spinner);
-        },
-        getValidIcon: function ($input) {
-            /// <summary>
-            /// Get valid a tag.
-            /// </summary>
-            if (this.isEmpty(this.$validMarkIcon)) {
-                var ids = this.getIdPrefixes(),
-                    id = this.getWrapperPrefix() + // wrapper-
-                         ids.valid +
-                         this.getInputNameOrId($input);
-                this.$validMarkIcon = $.byId(id);
-            }
-            return this.$validMarkIcon;
-        },
-        
-        showValidIcon: function ($input, message) {
-            var $markIcon = this.getValidIcon($input);
-            if ($markIcon.length === 0) {
-                $markIcon = this.createValidIcon($input, message);
-            }
-            this.setMessageOnIcons($markIcon, message);
-            this.animateOn($markIcon);
-        },
-        hideValidIcon: function ($input) {
-            var $icon = this.getValidIcon($input);
-            this.animateOff($icon);
+            return $existingIcon;
         },
         //
         getInvalidIcon: function ($input) {
@@ -427,27 +411,92 @@
             /// Get invalid a tag.
             /// </summary>
             if (this.isEmpty(this.$invalidMarkIcon)) {
-                var ids = this.getIdPrefixes(),
-                    id = this.getWrapperPrefix() + // wrapper-
-                         ids.invalid +
-                         this.getInputNameOrId($input);
-                this.$invalidMarkIcon = $.byId(id);
+                var ids = this.getIdPrefixes();
+                this.$invalidMarkIcon = this.getCachedIcon($input, ids.invalid);
             }
             return this.$invalidMarkIcon;
+        },
+
+        getValidIcon: function ($input) {
+            /// <summary>
+            /// Get valid a tag.
+            /// </summary>
+            if (this.isEmpty(this.$validMarkIcon)) {
+                var ids = this.getIdPrefixes();
+                this.$validMarkIcon = this.getCachedIcon($input, ids.valid);
+            }
+            return this.$validMarkIcon;
+        },
+        getSpinner: function ($input) {
+            /// <summary>
+            /// Get spinner's div tag.
+            /// </summary>
+            if (this.isEmpty(this.$spinner)) {
+                var ids = this.getIdPrefixes();
+                this.$spinner = this.getCachedIcon($input, ids.spinner);
+            }
+            return this.$spinner;
+        },
+        getErrorIcon: function ($input) {
+            /// <summary>
+            /// Get spinner's div tag.
+            /// </summary>
+            if (this.isEmpty(this.$errorIcon)) {
+                var ids = this.getIdPrefixes();
+                this.$errorIcon = this.getCachedIcon($input, ids.error);
+            }
+            return this.$errorIcon;
+        },
+        showIcon: function ($input, idPrefix, message) {
+            var ids = this.getIdPrefixes(),
+                $icon = this.getErrorIcon($input);
+            this.setMessageOnIcons($icon, message);
+            this.animateOn($icon);
+        },
+        showErrorIcon: function ($input, message) {
+            var $icon = this.getErrorIcon($input);
+            this.setMessageOnIcons($icon, message);
+            this.animateOn($icon);
+        },
+        showSpinner: function ($input) {
+            var $spinner = this.getSpinner($input);
+            this.animateOn($spinner);
         },
         
         showInvalidIcon: function ($input, message) {
             var $markIcon = this.getInvalidIcon($input);
-            if ($markIcon.length === 0) {
-                $markIcon = this.createInvalidIcon($input, message);
-            }
             this.setMessageOnIcons($markIcon, message);
             this.animateOn($markIcon);
+        },
+     
+        showValidIcon: function ($input, message) {
+            var $markIcon = this.getValidIcon($input);
+            this.setMessageOnIcons($markIcon, message);
+            this.animateOn($markIcon);
+        },
+        hideValidIcon: function ($input) {
+            var $icon = this.getValidIcon($input);
+            this.animateOff($icon);
+        },
+        hideErrorIcon: function ($input) {
+            var $icon = this.getErrorIcon($input);
+            this.animateOff($icon);
         },
         hideInvalidIcon: function ($input) {
             var $icon = this.getInvalidIcon($input);
             this.animateOff($icon);
         },
+        hideSpinner: function ($input) {
+            var $spinner = this.getSpinner($input);
+            this.animateOff($spinner);
+        },
+        animateOn: function ($object) {
+            $object.fadeIn("slow");
+        },
+        animateOff: function ($object) {
+            $object.hide();
+        },
+        
         processResponse: function ($input, response) {
             /// <summary>
             /// 
@@ -467,7 +516,7 @@
             var responseFormat = $self.settings.response;
             response = $.extend({}, responseFormat, response);
             if (response.isValid) {
-                self.validResponse($input,response);
+                self.validResponse($input, response);
             } else {
                 self.inValidResponse($input, response);
             }
