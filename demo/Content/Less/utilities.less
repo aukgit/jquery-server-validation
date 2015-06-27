@@ -1,0 +1,781 @@
+﻿@import "remixens/lesshat.less";
+@import "remixens/variables.less";
+
+ 
+
+/*table related */
+
+/*h1, h2, h3, h4, h5 {
+    display: inline;
+}*/
+
+.h1, .h2, .h3, .h4, .h5 {
+    display: block;
+    margin: 0;
+    padding: 0;
+    .padding-bottom(3px);
+    .padding-top(9px);
+}
+
+table caption {
+    background-color: #D0DEC2;
+    font-weight: bold;
+    padding: 5px;
+    text-align: center;
+}
+
+table td.dot {
+    width: 4px;
+}
+
+
+/*table related */
+
+
+
+textarea {
+    height: 45px;
+    resize: none;
+    border: 2px solid #D4ECF3;
+    background-color: #FDFDFD;
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="email"]:focus,
+textarea:hover,
+input[type="text"]:hover,
+input[type="number"]:hover,
+input[type="date"]:hover,
+input[type="password"]:hover,
+input[type="email"]:hover {
+    border: 1px solid #ACDFEE;
+}
+
+.editor-combo {
+    width: 188px;
+}
+
+/*Error List Style in Forms  */
+
+div.error-list {
+    background-color: #AD8A63;
+    padding-left: 18px; /*font-size: 2em;*/
+}
+
+div.error-list h1 {
+    font-size: 1.2em;
+    padding-top: 5px;
+}
+
+div.error-list ul {
+    background-color: #a52a2a;
+}
+
+.error-list ul li {
+    color: White;
+    list-style-type: decimal;
+}
+
+/*Error List Style in Forms  */
+
+
+/*LI*/
+
+.display-numbers {
+    list-style-type: decimal;
+    margin-left: 22px;
+}
+
+.display-numbers li {
+    display: list-item;
+}
+
+.plugin-a li a {
+    display: block;
+    margin-top: 6px;
+    background-color: white;
+    .height(22px);
+    padding-left: 8px; /*rounded border*/
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -khbtml-border-radius: 3px;
+}
+
+.plugin-a li a:hover, .plugin-a-white li a:hover {
+    background-color: brown;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.plugin-a-white li a {
+    -khbtml-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    display: block;
+    padding-left: 8px;
+}
+
+.Opacity-10 {
+    .opacity(.1); /* for all other browsers*/
+}
+
+.Opacity-20 {
+    .opacity(.2); /* for all other browsers*/
+}
+
+.Opacity-30 {
+    .opacity(.3); /* for all other browsers*/
+}
+
+.Opacity-40 {
+    .opacity(.4); /* for all other browsers*/
+}
+
+.Opacity-50 {
+    .opacity(.5); /* for all other browsers*/
+}
+
+.Opacity-60 {
+    .opacity(.6); /* for all other browsers*/
+}
+
+.Opacity-70 {
+    .opacity(.7); /* for all other browsers*/
+}
+
+.Opacity-80 {
+    .opacity(.8); /* for all other browsers*/
+}
+
+.Opacity-90 {
+    .opacity(.9); /* for all other browsers*/
+}
+
+.Opacity-100 {
+    .opacity(1); /* for all other browsers*/
+}
+
+// display properties
+.inline {
+    display: inline;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.block {
+    display: block;
+}
+
+.display-table {
+    display: table;
+}
+
+.display-table-cell {
+    display: table-cell;
+}
+
+
+.table-cell {
+    display: table-cell;
+}
+
+.fixed-width-294 {
+    .min-width(294px);
+    width: auto;
+}
+
+
+// rounded properties
+.rounded-1 {
+    .border-rounded(1px);
+}
+
+.rounded-2 {
+    .border-rounded(1px);
+}
+
+.rounded-3 {
+    .border-rounded(3px);
+}
+
+.rounded-4 {
+    .border-rounded(4px);
+}
+
+.rounded-5 {
+    .border-rounded(5px);
+}
+
+.rounded-6 {
+    .border-rounded(6px);
+}
+
+.rounded-7 {
+    .border-rounded(7px);
+}
+
+.rounded-8 {
+    .border-rounded(8px);
+}
+
+hr {
+    margin-bottom: 8px;
+    margin-top: 8px;
+}
+
+.gap-from-top {
+    .margin-top(55px);
+}
+
+.gap-from-top-small {
+    .margin-top(25px);
+}
+
+a.no-hover {
+    text-decoration: none;
+}
+
+.glyphicon {
+    cursor: pointer;
+}
+
+
+input.form-control.input-validation-error {
+    border-color: #E96666;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(233, 102, 102, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(233, 102, 102, 0.6);
+}
+
+
+.small-bottom-gap {
+    margin-bottom: 6px;
+}
+
+.unhappy {
+    font-size: 77px;
+    margin-left: -10px;
+}
+
+.unhappy-detail {
+    margin-left: -68px;
+    font-size: 40px;
+}
+
+.unhappy-page {
+    margin-top: 3px;
+}
+
+div.contactus {
+    font-size: 14px;
+}
+
+
+//utilities started
+.bottom-gap {
+    .margin-bottom(8px);
+}
+
+.bottom-gap-2x {
+    .margin-bottom(16px);
+}
+
+.bottom-gap-small {
+    .margin-bottom(5px);
+}
+
+.top-gap {
+    .margin-top(8px);
+}
+
+
+.top-gap-2x {
+    .margin-top(16px);
+}
+
+.top-gap-small {
+    .margin-top(5px);
+}
+
+// margins
+.margin-r-20 {
+    margin-right: 20px;
+}
+
+.margin-l-20 {
+    margin-left: 20px;
+}
+
+.margin-t-20 {
+    margin-top: 20px;
+}
+
+.margin-b-20 {
+    margin-bottom: 20px;
+}
+//margin 40
+
+.margin-r-40 {
+    margin-right: 40px;
+}
+
+.margin-l-40 {
+    margin-left: 40px;
+}
+
+.margin-t-40 {
+    margin-top: 40px;
+}
+
+.margin-b-40 {
+    margin-bottom: 40px;
+}
+// margin 80
+.margin-r-80 {
+    .margin-right(80px);
+}
+
+.margin-l-80 {
+    margin-left: 80px;
+}
+
+.margin-t-80 {
+    margin-top: 80px;
+}
+
+.margin-b-80 {
+    margin-bottom: 80px;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+.no-margin-important {
+    margin: 0 !important;
+}
+
+.no-margin-t {
+    margin-top: 0;
+}
+
+.no-padding-t {
+    padding-top: 0;
+}
+
+// margin end
+
+//indenting
+.indent-d-5 {
+    text-indent: .5em;
+}
+
+.indent-d-6 {
+    text-indent: .6em;
+}
+
+.indent-d-7 {
+    text-indent: .7em;
+}
+
+.indent-d-8 {
+    text-indent: .8em;
+}
+
+.indent-d-9 {
+    text-indent: .9em;
+}
+
+.indent-1 {
+    text-indent: 1em;
+}
+
+.indent-15 {
+    text-indent: 1.5em;
+}
+
+.indent-2 {
+    text-indent: 2em;
+}
+
+.indent-25 {
+    text-indent: 2.5em;
+}
+
+.indent-3 {
+    text-indent: 3em;
+}
+
+//padding
+.padding-r-20 {
+    .padding-right(20px);
+}
+
+.padding-r-20-important {
+    .padding-right(20px) !important;
+}
+
+.padding-l-20 {
+    .padding-left(20px);
+}
+
+.padding-t-20 {
+    .padding-top(20px);
+}
+
+.padding-b-20 {
+    .padding-bottom(20px);
+}
+
+.no-padding {
+    padding: 0;
+}
+
+// border
+.no-border {
+    border: 0;
+}
+
+
+//fonts
+.f-em-d-1 {
+    font-size: .3em;
+}
+
+.f-em-d-3 {
+    font-size: .3em;
+}
+
+.f-em-d-4 {
+    font-size: .4em;
+}
+
+.f-em-d-45 {
+    font-size: .45em;
+}
+
+.f-em-d-5 {
+    font-size: .5em;
+}
+
+.f-em-d-55 {
+    font-size: .55em;
+}
+
+.f-em-d-6 {
+    font-size: .6em;
+}
+
+.f-em-d-65 {
+    font-size: .65em;
+}
+
+.f-em-d-7 {
+    font-size: .7em;
+}
+
+.f-em-d-75 {
+    font-size: .75em;
+}
+
+.f-em-d-8 {
+    font-size: .8em;
+}
+
+.f-em-d-85 {
+    font-size: .85em;
+}
+
+.f-em-d-9 {
+    font-size: .9em;
+}
+
+.f-em-d-95 {
+    font-size: .95em;
+}
+
+.f-em-1 {
+    font-size: 1em;
+}
+
+.f-em-11 {
+    font-size: 1.1em;
+}
+
+.f-em-12 {
+    font-size: 1.2em;
+}
+
+.f-em-13 {
+    font-size: 1.3em;
+}
+
+.f-em-14 {
+    font-size: 1.4em;
+}
+
+.f-em-15 {
+    font-size: 1.5em;
+}
+
+.f-em-16 {
+    font-size: 1.6em;
+}
+
+.f-em-17 {
+    font-size: 1.7em;
+}
+
+.f-em-18 {
+    font-size: 1.8em;
+}
+
+.f-em-19 {
+    font-size: 1.9em;
+}
+
+.f-em-2 {
+    font-size: 2em;
+}
+
+.f-em-21 {
+    font-size: 2.1em;
+}
+
+.f-em-22 {
+    font-size: 2.2em;
+}
+
+.f-em-23 {
+    font-size: 2.3em;
+}
+
+.f-em-24 {
+    font-size: 2.4em;
+}
+
+.f-em-25 {
+    font-size: 2.5em;
+}
+
+.f-em-26 {
+    font-size: 2.6em;
+}
+
+.f-em-27 {
+    font-size: 2.7em;
+}
+
+.f-em-28 {
+    font-size: 2.8em;
+}
+
+.f-em-29 {
+    font-size: 2.9em;
+}
+
+.f-em-3 {
+    font-size: 3em;
+}
+
+.f-em-31 {
+    font-size: 3.1em;
+}
+
+.f-em-32 {
+    font-size: 3.3em;
+}
+
+.f-em-34 {
+    font-size: 3.4em;
+}
+
+.f-em-35 {
+    font-size: 3.6em;
+}
+
+.f-em-36 {
+    font-size: 3.6em;
+}
+
+.f-em-37 {
+    font-size: 3.7em;
+}
+
+.f-em-38 {
+    font-size: 3.8em;
+}
+
+.f-em-39 {
+    font-size: 3.9em;
+}
+
+.f-em-4 {
+    font-size: 4em;
+}
+
+.lower, .tolower, .Tolower, .lowercase, .ToLower {
+    text-transform: lowercase;
+}
+
+.upper, .toupper, .Toupper, .uppercase {
+    text-transform: uppercase;
+}
+
+.capital, .capitalize, .tocapi, .capitalcase, .propercase, .each-word-capital {
+    text-transform: capitalize;
+}
+
+.first-letter-capital:first-letter {
+    text-transform: uppercase;
+}
+
+.no-resize {
+    resize: none;
+}
+
+.make-distance {
+    margin: 12px;
+    margin-left: 0;
+}
+
+.Hide, .hide {
+    display: none;
+}
+
+.medium-font {
+    font-size: 122%;
+}
+
+.bigger-font {
+    font-size: 200%;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.center {
+    text-align: center;
+}
+
+.tleft {
+    text-align: left;
+}
+
+.tright {
+    text-align: right;
+}
+
+.justify, .tjustify {
+    text-align: justify;
+}
+
+.vertically-center-wrapper {
+    text-align: center;
+}
+
+.vertically-center-content {
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hide {
+    display: none;
+}
+
+.first-line-indent {
+    text-indent: 1.2em;
+}
+
+.width-100-percent, .full-width {
+    width: 100%;
+}
+
+// centering utils
+.absolute-center {
+    width: 50%;
+    height: 50%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    &.is-fixed {
+        position: fixed;
+        z-index: 999;
+    }
+
+    &.is-right {
+        left: auto;
+        right: 20px;
+        text-align: right;
+    }
+
+    &.is-Left {
+        right: auto;
+        left: 20px;
+        text-align: left;
+    }
+}
+
+//vertically - center
+
+.jumbotron.vertical-center {
+    margin-bottom: 0; /* Remove the default bottom margin of .jumbotron */
+}
+
+.vertical-center {
+    min-height: 100%; /* Fallback for vh unit */
+    min-height: 100vh; /* You might also want to use
+                        'height' property instead.
+                        
+                        Note that for percentage values of
+                        'height' or 'min-height' properties,
+                        the 'height' of the parent element
+                        should be specified explicitly.
+  
+                        In this case the parent of '.vertical-center'
+                        is the <body> element */
+    /* Make it a flex container */
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    /* Align the bootstrap's container vertically */
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    /* In legacy web browsers such as Firefox 9
+     we need to specify the width of the flex container */
+    width: 100%;
+    /* Also 'margin: 0 auto' doesn't have any effect on flex items in such web browsers
+     hence the bootstrap's container won't be aligned to the center anymore.
+  
+     Therefore, we should use the following declarations to get it centered again */
+    -webkit-box-pack: center;
+    -moz-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+
+@import "see-more-btn.less";

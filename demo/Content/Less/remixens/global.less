@@ -1,0 +1,23 @@
+﻿@base-font-size-px: 10;
+@base-font-size-px-to-em: 16;
+
+@pxtorem-js-function: ~`pxtorem = function(px){ 
+    if (typeof rmxsBaseFontSize == 'undefined')
+      rmxsBaseFontSize = @{base-font-size-px}; 
+      if(px == '0px' || px == '0'){
+        return 0;
+      } else {
+        return (parseInt(px.replace(/(^\d+)(.+$)/i,'$1')) / rmxsBaseFontSize + 'rem'); 
+      }
+      
+    }`;
+
+@pxtoem-js-function: ~`pxtoem = function(px){ 
+    if (typeof emBaseFontSize == 'undefined')
+      emBaseFontSize = @{base-font-size-px-to-em};
+      if(px == '0px' || px == '0'){
+        return 0;
+      } else {
+        return (parseInt(px.replace(/(^\d+)(.+$)/i,'$1')) / emBaseFontSize + 'em');      
+      }
+    }`;

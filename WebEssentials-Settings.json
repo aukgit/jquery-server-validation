@@ -102,9 +102,9 @@
     "LintOnSave": true,
     "LintResultLocation": "Message",
     "MakeMinified": true,
-    "OutputDirectory": null,
-    "RootDirectory": "/dist/Script",
-    "RunOnBuild": false,
+    "OutputDirectory": "/src/Content/Script",
+    "RootDirectory": "/src/Content/Script",
+    "RunOnBuild": true,
     "TermSemicolons": true
   },
   "Less": {
@@ -113,7 +113,7 @@
     "EnableChainCompilation": true,
     "GenerateSourceMaps": true,
     "MinifyInPlace": false,
-    "OutputDirectory": "/dist/CSS",
+    "OutputDirectory": "/src/Content/CSS",
     "ProcessSourceMapsForEditorEnhancements": true,
     "ShowPreviewPane": true,
     "StrictMath": false
