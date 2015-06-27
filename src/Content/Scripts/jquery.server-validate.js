@@ -35,7 +35,6 @@
         $divContainers,
         settings,
         additionalFields,
-        $form = null,
         $selfContainer = null,
         defaults = {
             crossDomain: true,
@@ -44,6 +43,7 @@
             dontSendSameRequestTwice: true,
             disableInputOnValidation: true,
             focusPersistIfNotValid: true,
+            hideOnValidation : true,
             messages: {
                 requesting: "Requesting data..."
             },
@@ -191,10 +191,11 @@
         },
         processDiv: function ($div) {
             //var $self = $selfContainer;
-            var $input = this.getInput($div);
-            var url = this.getUrl();
+            var $input = this.getInput($div),
+                url = this.getUrl();
             //this.test();
             this.inputProcessWithBlurEvent($div, $input, url);
+
         },
         test: function () {
             this.showSpinner($input);
@@ -209,6 +210,9 @@
                 console.log("Request is same : " + returnStatement);
             }
             return returnStatement;
+        },
+        bindFormWithInvalidEvent: function ($form) {
+
         },
         inputProcessWithBlurEvent: function ($div, $input, url) {
             var self = this;
@@ -228,7 +232,7 @@
                         // is input needed to be valid before send the request.
                         isRequstValid = (validationRequires && $inputNew.valid()) || !validationRequires;
 
-                       
+
 
                         if (isRequstValid) {
                             var fields = self.concatAdditionalFields($inputNew);
@@ -241,7 +245,18 @@
                 }
             });
         },
-        focusIfnotValid : function($input) {
+        focusIfnotValid: function ($input, force) {
+            /// <summary>
+            /// Focus on the input if not valid.
+            /// If forced then focus anyway.
+            /// </summary>
+            /// <param name="$input"></param>
+            /// <param name="force"></param>
+            /// <returns type=""></returns>
+            if (force === true) {
+                $input.focus();
+                return;
+            }
             if ($input.valid() === false) {
                 $input.focus();
             }
@@ -476,7 +491,7 @@
                 $icon = null;
             //if (ids.spinner === idPrefix) {
             //    $icon = this.getErrorIcon($input);
-                
+
             //}
             this.setMessageOnIcons($icon, message);
             this.animateOn($icon);
@@ -494,7 +509,7 @@
                 $icon = null;
             if (ids.spinner === idPrefix) {
                 $icon = this.getErrorIcon($input);
-                
+
             }
             this.setMessageOnIcons($icon, message);
             this.animateOn($icon);
@@ -587,6 +602,20 @@
             if (isDisableInput) {
                 $input.attr("disabled", "disabled");
             }
+
+            var $div = this.$element,
+                settings = this.getSettings(),
+                validation = true,
+                msg = response.message;
+            $div.attr("data-server-validated", validation)
+                .attr("data-message", msg);
+            $input.attr("data-server-validated", validation)
+                .attr("data-message", msg);
+
+            if (settings.hideOnValidation) {
+                $div.attr("data-is-hidden", validation);
+                $div.hide('slow');
+            }
         },
         inValidResponse: function ($input, response) {
             //response: {
@@ -597,7 +626,17 @@
             //        errorMessage: null
             //}
             this.showInvalidIcon($input, response.errorCode + " : " + response.errorMessage);
-            
+            var $div = this.$element,
+                validation = false,
+                settings = this.getSettings(),
+                msg = response.errorMessage;
+            $div.attr("data-server-validated", validation)
+                .attr("data-message", msg);
+            $input.attr("data-server-validated", validation)
+                .attr("data-message", msg);
+            if (settings.focusPersistIfNotValid) {
+                this.focusIfnotValid($input, true);
+            }
         }
     });
 
