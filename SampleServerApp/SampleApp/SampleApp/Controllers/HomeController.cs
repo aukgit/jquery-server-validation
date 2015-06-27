@@ -57,7 +57,7 @@ namespace SampleApp.Controllers {
                 message = "Field is invalid.",
                 isValid = false,
                 isError = true,
-                errorCode = "404",
+                errorCode = "500",
                 errorMessage = "Field is invalid"
             };
             return Json(x, JsonRequestBehavior.AllowGet);

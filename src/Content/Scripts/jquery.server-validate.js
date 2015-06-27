@@ -6,7 +6,7 @@
 /// <reference path="jquery.validate.unobtrusive.js" />
 /*!
  * jQuery Server Validate 1.0 
- * (a plugin for ASP.NET MVC or server side programming language)
+ * (a plugin for ASP.NET MVC or any server side programming language)
  * 
  * Copyright (c) 2015 by 
  * Md. Alim Ul Karim, Bangladesh, Dhaka.
@@ -15,6 +15,7 @@
  * Performance test http://jsperf.com/jquery-specific-performance-test-with-non-specific
  * by Md. Alim Ul karim 
  * Date: 19 June 2015
+ * Modified Date: 27 June 2015
  */
 
 ;
@@ -34,6 +35,7 @@
         $divContainers,
         settings,
         additionalFields,
+        $form = null,
         $selfContainer = null,
         defaults = {
             crossDomain: true,
@@ -463,6 +465,7 @@
         },
         showOnlyIcon: function ($input, idPrefix, message) {
             /// <summary>
+            /// inComplete
             /// Show only that icon and hide all the others.
             /// </summary>
             /// <param name="$input"></param>
@@ -470,7 +473,29 @@
             /// <param name="message"></param>
             /// <returns type=""></returns>
             var ids = this.getIdPrefixes(),
+                $icon = null;
+            //if (ids.spinner === idPrefix) {
+            //    $icon = this.getErrorIcon($input);
+                
+            //}
+            this.setMessageOnIcons($icon, message);
+            this.animateOn($icon);
+        },
+        hideIcon: function ($input, idPrefix) {
+            /// <summary>
+            /// inComplete
+            /// Show only that icon and hide all the others.
+            /// </summary>
+            /// <param name="$input"></param>
+            /// <param name="idPrefix"></param>
+            /// <param name="message"></param>
+            /// <returns type=""></returns>
+            var ids = this.getIdPrefixes(),
+                $icon = null;
+            if (ids.spinner === idPrefix) {
                 $icon = this.getErrorIcon($input);
+                
+            }
             this.setMessageOnIcons($icon, message);
             this.animateOn($icon);
         },
@@ -572,6 +597,7 @@
             //        errorMessage: null
             //}
             this.showInvalidIcon($input, response.errorCode + " : " + response.errorMessage);
+            
         }
     });
 
