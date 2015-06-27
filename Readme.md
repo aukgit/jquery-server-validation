@@ -35,7 +35,16 @@ by [Alim Ul Karim](http://alimkarim.com "Alim Ul Karim")
        </div>
     </form>
 
+#### Javascript References
 
+    <script src="Content/Scripts/jquery-2.1.4.js"></script>
+    <script src="Content/Scripts/bootstrap.js"></script>
+    <script src="Content/Scripts/moment.js"></script>
+    <script src="Content/Scripts/bootstrap-datetimepicker.js"></script>
+    <script src="Content/Scripts/byId.js"></script>
+    <script src="Content/Scripts/jquery.validate.js"></script>
+    <script src="Content/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="Content/Scripts/jquery.server-validate.js"></script>
 #### Javascript
 
     // pick the id container.
