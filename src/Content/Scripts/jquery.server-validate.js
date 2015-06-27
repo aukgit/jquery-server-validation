@@ -43,7 +43,7 @@
             dontSendSameRequestTwice: true,
             disableInputOnValidation: true,
             focusPersistIfNotValid: true,
-            hideOnValidation : true,
+            hideOnValidation : false,
             messages: {
                 requesting: "Requesting data..."
             },
@@ -281,11 +281,12 @@
         },
         sendRequest: function ($div, $input, url, sendingFields) {
 
-            var method = this.getSubmitMethod($input);
-            var self = this;
-            var isInTestingMode = self.isDebugging;
+            var method = this.getSubmitMethod($input),
+                self = this,
+                isInTestingMode = self.isDebugging;
 
             //icons show/hide
+            $div.attr("data-icon-added", "true");
             this.showSpinner($input);
             this.hideInvalidIcon($input);
             this.hideValidIcon($input);

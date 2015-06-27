@@ -64,11 +64,59 @@ $.genericPage = function() {
 
     var $inputs = $processForm.find("input");
     $inputs.attr('data-url', $urlInput.val());
-    var $formRows = $processForm.find(".form-row:first");
+    var $formRows = $processForm.find(".form-row");
 
     $formRows.attr("data-is-validate", "true");
 
-    $processForm.serverValidate();
+    $processForm.serverValidate({
+        crossDomain: true,
+        multipleRequests: true,
+        checkValidationBeforeSendingRequest: true,
+        dontSendSameRequestTwice: true,
+        disableInputOnValidation: true,
+        focusPersistIfNotValid: true,
+        hideOnValidation: false,
+        messages: {
+            requesting: "Requesting data XX..."
+        },
+        selectors: {
+            divContainer: ".form-row",
+            validatorContainer: ".validator-container",
+            validator: ".validator",
+            additionalFields: [
+                "[name=__RequestVerificationToken]"
+            ]
+        },
+        attributes: {
+            url: "data-url",
+            isValidate: "data-is-validate",
+            submitMethod: "data-submit-method"
+        },
+        icons: {
+            invalid: "validation-icon-invalid fa fa-times",
+            valid: "validation-icon-valid fa fa-check",
+            spinner: "validation-icon-spinner fa fa-refresh fa-spin-custom",
+            error: "validation-icon-error fa fa-exclamation-circle"
+        },
+        iconsIdPrefixes: {
+            invalid: "invalid-mark-",
+            valid: "valid-mark-",
+            spinner: "validation-spinner-",
+            error: "validation-error-"
+        },
+        response: {
+            message: "Field is valid.",
+            isValid: true,
+            isError: false,
+            errorCode: null,
+            errorMessage: null
+        },
+        events: {
+            beforeSendingRequest: function ($div, $input, url) { },
+            responseReceived: function ($div, $input, response) { },
+            responseProcessed: function ($div, $input, response) { }
+        }
+    });
 
 
 

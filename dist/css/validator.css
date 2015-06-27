@@ -79,8 +79,10 @@
 .relative {
   position: relative;
 }
-.form-group {
+.form-group[data-icon-added] {
+  /*margin-bottom: 14px;
+        margin-top: 15px;*/
+  margin-top: 8.5px;
   margin-bottom: 14px;
-  margin-top: 10px;
 }
 /*# sourceMappingURL=validator.css.map */
