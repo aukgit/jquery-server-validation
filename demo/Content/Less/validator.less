@@ -13,7 +13,7 @@
     text-align: center;
     white-space: nowrap;
     vertical-align: baseline;
-
+     
     &.field-validation-error {
         background-color: @input-error-bg-color;
 
@@ -33,7 +33,7 @@
 .validator-container {
     display: block;
 
-    [id*='wrapper-invalid-mark-'] {
+    [id*='wrapper-invalid-mark-'],[id*='wrapper-validation-error-'] {
         @color: @tooltip-invalid-bg-color;
 
         .tooltip-inner {
