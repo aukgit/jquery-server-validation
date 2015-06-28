@@ -94,9 +94,67 @@ by [Alim Ul Karim](http://alimkarim.com "Alim Ul Karim")
                 errorMessage: null
             },
             events: {
-                beforeSendingRequest: function ($div, $input, url) { },
-                responseReceived: function ($div, $input, response) { },
-                responseProcessed: function ($div, $input, response) { }
+                iconCreated: function($div, $input, $iconContainer) {
+                    console.log("iconCreated");
+                    console.log($div);
+                    console.log($input);
+                    console.log($iconContainer);
+                },
+                sameRequestTwice: function($div, $input, url) {
+                    console.log("sameRequestTwice");
+                    console.log($div);
+                    console.log($input);
+                    console.log(url);
+                },
+                beforeSendingRequest: function($div, $input, url) {
+                    console.log("beforeSendingRequest");
+                    console.log($div);
+                    console.log($input);
+                    console.log(url);
+                },
+                responseReceived: function($div, $input, response) {
+                    console.log("responseReceived");
+                    console.log($div);
+                    console.log($input);
+                    console.log(response);
+                },
+                responseProcessed: function($div, $input, response) {
+                    console.log("responseProcessed");
+                    console.log($div);
+                    console.log($input);
+                    console.log(response);
+                },
+                invalidBefore: function($div, $input, response) {
+                    console.log("invalidBefore");
+                    console.log($div);
+                    console.log($input);
+                    console.log(response);
+                },
+                invalidAfter: function($div, $input, response) {
+                    console.log("invalidAfter");
+                    console.log($div);
+                    console.log($input);
+                    console.log(response);
+                },
+                validBefore: function($div, $input, response) {
+                    console.log("validBefore");
+                    console.log($div);
+                    console.log($input);
+                    console.log(response);
+                },
+                validAfter: function($div, $input, response) {
+                    console.log("validAfter");
+                    console.log($div);
+                    console.log($input);
+                    console.log(response);
+                },
+                onError: function($div, $input, jqXHR, textStatus, exceptionMessage, url) {
+                    console.log("onError");
+                    console.log($div);
+                    console.log($input);
+                    console.log(jqXHR);
+                    console.log(url);
+                }
             }
         });
 
