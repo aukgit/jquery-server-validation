@@ -2,6 +2,9 @@
 A server side validation plugin for any programming language, specially for ASP.NET MVC with antiforgery validation
 by [Alim Ul Karim](http://alimkarim.com "Alim Ul Karim")
 ![Example of jQuery server side validation.](https://raw.githubusercontent.com/aukgit/jquery-server-validation/master/jQueryValidationGif.gif)
+
+#### [2 mins youtube video on how it works](https://www.youtube.com/watch?v=rzo9GcnUSik&feature=youtu.be "jQuery Server Validation how it works.")
+
 #### CSS References
 
     <link href="content/css/animate-refresh.css" rel="stylesheet" />
