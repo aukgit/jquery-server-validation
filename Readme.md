@@ -1,7 +1,7 @@
 # [jQuery Server Validation](https://github.com/aukgit/jquery-server-validation "jquery-server-validation")
 A server side validation plugin for any programming language, specially for ASP.NET MVC with antiforgery validation
 by [Alim Ul Karim](http://alimkarim.com "Alim Ul Karim")
-
+![Example of jQuery server side validation.](https://raw.githubusercontent.com/aukgit/jquery-server-validation/master/jQueryValidationGif.gif)
 #### CSS References
 
     <link href="content/css/animate-refresh.css" rel="stylesheet" />
@@ -158,4 +158,4 @@ by [Alim Ul Karim](http://alimkarim.com "Alim Ul Karim")
             }
         });
 
-![Example of jQuery server side validation.](https://raw.githubusercontent.com/aukgit/jquery-server-validation/master/requesting%20image.png)
+
