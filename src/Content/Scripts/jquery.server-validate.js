@@ -234,9 +234,22 @@
         },
         inputProcessWithBlurEvent: function ($div, $input, url) {
             var self = this,
-                settings = this.getSettings();
+                settings = this.getSettings(),
+                isIconsVisible = true;
             $input.on("blur", function (evt) {
                 self.blurEvent(evt, $div, self, $input, url);
+                isIconsVisible = true;
+            });
+            $input.on("keypress", function () {
+                if (isIconsVisible === true) {
+                    $div.removeAttr("data-icon-added");
+                    self.hideInvalidIcon($input);
+                    self.hideSpinner($input);
+                    self.hideErrorIcon($input);
+                    self.hideErrorIcon($input);
+                    self.hideValidIcon($input);
+                    isIconsVisible = false;
+                }
             });
         },
         blurEvent: function (event, $div, self, $input, url) {
@@ -245,7 +258,7 @@
             if (isRequstValid) {
                 var $inputNew = $input;///$(this);
                 var isDuplicateRequestAllowed = self.dontSendSameRequestTwice() && !self.isPreviousRequestIsSame($div, $inputNew, url);
-                isRequstValid = isDuplicateRequestAllowed || ! self.dontSendSameRequestTwice();
+                isRequstValid = isDuplicateRequestAllowed || !self.dontSendSameRequestTwice();
                 // check if same request is allowed to send twice.
                 if (isRequstValid) {
 
@@ -254,7 +267,6 @@
 
                     // is input needed to be valid before send the request.
                     isRequstValid = (validationRequires && $inputNew.valid()) || !validationRequires;
-
 
                     if (isRequstValid) {
                         var fields = self.concatAdditionalFields($inputNew);
@@ -347,7 +359,7 @@
                 self.hideSpinner($input);
             }).fail(function (jqXHR, textStatus, exceptionMessage) {
                 self.hideSpinner($input);
-                self.errorProcess($div,$input, jqXHR, textStatus, exceptionMessage, url);
+                self.errorProcess($div, $input, jqXHR, textStatus, exceptionMessage, url);
                 console.log("Request failed: " + exceptionMessage + ". Url : " + url);
             });
 
@@ -599,7 +611,7 @@
                 events.responseReceived($div, $input, response);
             }
             var responseFormat = settings.response;
-            
+
             response = $.extend({}, responseFormat, response);
             if (response.isValid) {
                 self.validResponse($input, response);
