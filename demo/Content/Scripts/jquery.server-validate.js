@@ -107,7 +107,7 @@
 
     function processAdditionalFields($elementContainer) {
         var addFields = [];
-        var selectors = $elementContainer.settings.selectors.additionalFields;
+        var selectors = window.settings.selectors.additionalFields;
         for (var i = 0; i < selectors.length; i++) {
             var selector = selectors[i];
             var $element = $elementContainer.find(selector);
@@ -136,43 +136,37 @@
             }
         },
         getSettings: function () {
-            return $selfContainer.settings;
+            return window.settings;
         },
         isMultipleRequestAllowed: function () {
-            return $selfContainer.settings.multipleRequests;
+            return this.getSettings().multipleRequests;
         },
         isDisableInputOnValidation: function () {
-            return $selfContainer.settings.disableInputOnValidation;
+            return this.getSettings().disableInputOnValidation;
         },
         isInputValidationRequirestoSendRequest: function () {
-            return $selfContainer.settings.checkValidationBeforeSendingRequest;
+            return this.getSettings().checkValidationBeforeSendingRequest;
         },
         dontSendSameRequestTwice: function () {
-            return $selfContainer.settings.dontSendSameRequestTwice;
+            return this.getSettings().dontSendSameRequestTwice;
         },
         getAttributes: function () {
-            var $self = $selfContainer;
-            return $self.settings.attributes;
+            return this.getSettings().attributes;
         },
         getEvents: function () {
-            var $self = $selfContainer;
-            return $self.settings.events;
+            return this.getSettings().events;
         },
         getIcons: function () {
-            var $self = $selfContainer;
-            return $self.settings.icons;
+            return this.getSettings().icons;
         },
         getIdPrefixes: function () {
-            var $self = $selfContainer;
-            return $self.settings.iconsIdPrefixes;
+            return this.getSettings().iconsIdPrefixes;
         },
         getSelectors: function () {
-            var $self = $selfContainer;
-            return $self.settings.selectors;
+            return this.getSettings().selectors;
         },
         getMessages: function () {
-            var $self = $selfContainer;
-            return $self.settings.messages;
+            return this.getSettings().messages;
         },
         isValidForProcessing: function ($div) {
             /// <summary>
@@ -234,9 +228,22 @@
         },
         inputProcessWithBlurEvent: function ($div, $input, url) {
             var self = this,
-                settings = this.getSettings();
+                settings = this.getSettings(),
+                isIconsVisible = true;
             $input.on("blur", function (evt) {
                 self.blurEvent(evt, $div, self, $input, url);
+                isIconsVisible = true;
+            });
+            $input.on("keypress", function () {
+                if (isIconsVisible === true) {
+                    $div.removeAttr("data-icon-added");
+                    self.hideInvalidIcon($input);
+                    self.hideSpinner($input);
+                    self.hideErrorIcon($input);
+                    self.hideErrorIcon($input);
+                    self.hideValidIcon($input);
+                    isIconsVisible = false;
+                }
             });
         },
         blurEvent: function (event, $div, self, $input, url) {
@@ -245,7 +252,7 @@
             if (isRequstValid) {
                 var $inputNew = $input;///$(this);
                 var isDuplicateRequestAllowed = self.dontSendSameRequestTwice() && !self.isPreviousRequestIsSame($div, $inputNew, url);
-                isRequstValid = isDuplicateRequestAllowed || ! self.dontSendSameRequestTwice();
+                isRequstValid = isDuplicateRequestAllowed || !self.dontSendSameRequestTwice();
                 // check if same request is allowed to send twice.
                 if (isRequstValid) {
 
@@ -254,7 +261,6 @@
 
                     // is input needed to be valid before send the request.
                     isRequstValid = (validationRequires && $inputNew.valid()) || !validationRequires;
-
 
                     if (isRequstValid) {
                         var fields = self.concatAdditionalFields($inputNew);
@@ -284,7 +290,7 @@
             }
         },
         concatAdditionalFields: function ($input) {
-            var addFields = $selfContainer.additionalFields.slice();
+            var addFields = window.additionalFields.slice();
             var fields = {
                 name: $input.attr("name"),
                 value: $input.val()
@@ -298,7 +304,7 @@
             /// </summary>
             /// <param name="$div"></param>
             /// <returns type=""></returns>
-            var attrs = $selfContainer.settings.attributes;
+            var attrs = this.getSettings().attributes;
             return $input.attr(attrs.submitMethod);
         },
         abortPreviousAjaxRequest: function ($input) {
@@ -347,7 +353,7 @@
                 self.hideSpinner($input);
             }).fail(function (jqXHR, textStatus, exceptionMessage) {
                 self.hideSpinner($input);
-                self.errorProcess($div,$input, jqXHR, textStatus, exceptionMessage, url);
+                self.errorProcess($div, $input, jqXHR, textStatus, exceptionMessage, url);
                 console.log("Request failed: " + exceptionMessage + ". Url : " + url);
             });
 
@@ -599,7 +605,7 @@
                 events.responseReceived($div, $input, response);
             }
             var responseFormat = settings.response;
-            
+
             response = $.extend({}, responseFormat, response);
             if (response.isValid) {
                 self.validResponse($input, response);
@@ -699,14 +705,16 @@
         var $elementContainer = this;
         $selfContainer = this;
         if ($elementContainer.isInit !== true) {
-            this.settings = $.extend({}, defaults, options);
-            var selectors = this.settings.selectors;
-            this.$divContainers = $elementContainer.find(selectors.divContainer);
-            this.additionalFields = processAdditionalFields($elementContainer);
-            this.isInit = true;
+            window.settings = $.extend({}, defaults, options);
+            var selectors = window.settings.selectors;
+            window.$divContainers = $elementContainer.find(selectors.divContainer);
+            window.additionalFields = processAdditionalFields($elementContainer);
         }
-        for (var i = 0; i < this.$divContainers.length; i++) {
-            var $divElement = $(this.$divContainers[i]);
+
+        var $containers = window.$divContainers;
+
+        for (var i = 0; i < $containers.length; i++) {
+            var $divElement = $($containers[i]);
             new plugin($divElement, options);
         }
     };

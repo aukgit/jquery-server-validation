@@ -107,7 +107,7 @@
 
     function processAdditionalFields($elementContainer) {
         var addFields = [];
-        var selectors = $elementContainer.settings.selectors.additionalFields;
+        var selectors = window.settings.selectors.additionalFields;
         for (var i = 0; i < selectors.length; i++) {
             var selector = selectors[i];
             var $element = $elementContainer.find(selector);
@@ -136,43 +136,37 @@
             }
         },
         getSettings: function () {
-            return $selfContainer.settings;
+            return window.settings;
         },
         isMultipleRequestAllowed: function () {
-            return $selfContainer.settings.multipleRequests;
+            return this.getSettings().multipleRequests;
         },
         isDisableInputOnValidation: function () {
-            return $selfContainer.settings.disableInputOnValidation;
+            return this.getSettings().disableInputOnValidation;
         },
         isInputValidationRequirestoSendRequest: function () {
-            return $selfContainer.settings.checkValidationBeforeSendingRequest;
+            return this.getSettings().checkValidationBeforeSendingRequest;
         },
         dontSendSameRequestTwice: function () {
-            return $selfContainer.settings.dontSendSameRequestTwice;
+            return this.getSettings().dontSendSameRequestTwice;
         },
         getAttributes: function () {
-            var $self = $selfContainer;
-            return $self.settings.attributes;
+            return this.getSettings().attributes;
         },
         getEvents: function () {
-            var $self = $selfContainer;
-            return $self.settings.events;
+            return this.getSettings().events;
         },
         getIcons: function () {
-            var $self = $selfContainer;
-            return $self.settings.icons;
+            return this.getSettings().icons;
         },
         getIdPrefixes: function () {
-            var $self = $selfContainer;
-            return $self.settings.iconsIdPrefixes;
+            return this.getSettings().iconsIdPrefixes;
         },
         getSelectors: function () {
-            var $self = $selfContainer;
-            return $self.settings.selectors;
+            return this.getSettings().selectors;
         },
         getMessages: function () {
-            var $self = $selfContainer;
-            return $self.settings.messages;
+            return this.getSettings().messages;
         },
         isValidForProcessing: function ($div) {
             /// <summary>
@@ -296,7 +290,7 @@
             }
         },
         concatAdditionalFields: function ($input) {
-            var addFields = $selfContainer.additionalFields.slice();
+            var addFields = window.additionalFields.slice();
             var fields = {
                 name: $input.attr("name"),
                 value: $input.val()
@@ -310,7 +304,7 @@
             /// </summary>
             /// <param name="$div"></param>
             /// <returns type=""></returns>
-            var attrs = $selfContainer.settings.attributes;
+            var attrs = this.getSettings().attributes;
             return $input.attr(attrs.submitMethod);
         },
         abortPreviousAjaxRequest: function ($input) {
@@ -711,14 +705,16 @@
         var $elementContainer = this;
         $selfContainer = this;
         if ($elementContainer.isInit !== true) {
-            this.settings = $.extend({}, defaults, options);
-            var selectors = this.settings.selectors;
-            this.$divContainers = $elementContainer.find(selectors.divContainer);
-            this.additionalFields = processAdditionalFields($elementContainer);
-            this.isInit = true;
+            window.settings = $.extend({}, defaults, options);
+            var selectors = window.settings.selectors;
+            window.$divContainers = $elementContainer.find(selectors.divContainer);
+            window.additionalFields = processAdditionalFields($elementContainer);
         }
-        for (var i = 0; i < this.$divContainers.length; i++) {
-            var $divElement = $(this.$divContainers[i]);
+
+        var $containers = window.$divContainers;
+
+        for (var i = 0; i < $containers.length; i++) {
+            var $divElement = $($containers[i]);
             new plugin($divElement, options);
         }
     };
