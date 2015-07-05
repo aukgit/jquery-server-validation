@@ -18,11 +18,7 @@
  * Modified Date: 27 June 2015
  */
 
-;
-
-
-
-(function ($, window, document, undefined) {
+;(function ($, window, document, undefined) {
 
     "use strict";
     if (typeof jQuery === 'undefined') {
