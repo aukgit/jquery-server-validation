@@ -90,7 +90,7 @@
         };
 
     // The actual plugin constructor
-    function plugin($divElement) {
+    function plugin($divElement, settings, additionalFields) {
         /// <summary>
         /// Process the div element and 
         /// </summary>
@@ -98,12 +98,15 @@
         /// <returns type=""></returns>
         this.$element = $divElement;
         this._name = pluginName;
+        this.settings = settings;
+        this.additionalFields = additionalFields;
+
         this.init($divElement);
     }
 
-    function processAdditionalFields($elementContainer) {
+    function processAdditionalFields($elementContainer, additionalFields) {
         var addFields = [];
-        var selectors = window.settings.selectors.additionalFields;
+        var selectors = additionalFields;
         for (var i = 0; i < selectors.length; i++) {
             var selector = selectors[i];
             var $element = $elementContainer.find(selector);
@@ -123,6 +126,7 @@
     // Avoid Plugin.prototype conflicts
     $.extend(plugin.prototype, {
         isDebugging: false,
+        additionalFields : [],
         isEmpty: function (variable) {
             return variable === null || variable === undefined || variable.length === 0;
         },
@@ -132,7 +136,7 @@
             }
         },
         getSettings: function () {
-            return window.settings;
+            return this.settings;
         },
         isMultipleRequestAllowed: function () {
             return this.getSettings().multipleRequests;
@@ -286,7 +290,7 @@
             }
         },
         concatAdditionalFields: function ($input) {
-            var addFields = window.additionalFields.slice();
+            var addFields = this.additionalFields.slice();
             var fields = {
                 name: $input.attr("name"),
                 value: $input.val()
@@ -700,18 +704,20 @@
         /// <returns type=""></returns>
         var $elementContainer = this;
         $selfContainer = this;
+        var settings;
+        var additionalFields;
         if ($elementContainer.isInit !== true) {
-            window.settings = $.extend({}, defaults, options);
-            var selectors = window.settings.selectors;
-            window.$divContainers = $elementContainer.find(selectors.divContainer);
-            window.additionalFields = processAdditionalFields($elementContainer);
+            settings = $.extend({}, defaults, options);
+            var selectors = settings.selectors;
+            $divContainers = $elementContainer.find(selectors.divContainer);
+            additionalFields = processAdditionalFields($elementContainer, selectors.additionalFields);
         }
 
-        var $containers = window.$divContainers;
+        var $containers = $divContainers;
 
         for (var i = 0; i < $containers.length; i++) {
             var $divElement = $($containers[i]);
-            new plugin($divElement, options);
+            new plugin($divElement, settings, additionalFields);
         }
     };
 
