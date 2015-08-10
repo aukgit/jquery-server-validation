@@ -15,7 +15,7 @@
   vertical-align: baseline;
 }
 .invalid-input.field-validation-error {
-  background-color: #df382c;
+  background-color: #e22013;
 }
 .invalid-input.field-validation-error.break-line {
   display: block;
@@ -29,14 +29,17 @@
 .validator-container {
   display: block;
 }
-.validator-container [id*='wrapper-invalid-mark-'] .tooltip-inner {
-  background-color: #f91909;
+.validator-container [id*='wrapper-invalid-mark-'] .tooltip-inner,
+.validator-container [id*='wrapper-validation-error-'] .tooltip-inner {
+  background-color: #e22013;
 }
-.validator-container [id*='wrapper-invalid-mark-'] .tooltip-arrow {
-  border-top-color: #f91909;
+.validator-container [id*='wrapper-invalid-mark-'] .tooltip-arrow,
+.validator-container [id*='wrapper-validation-error-'] .tooltip-arrow {
+  border-top-color: #e22013;
 }
-.validator-container [id*='wrapper-invalid-mark-'] .fa {
-  color: #f91909;
+.validator-container [id*='wrapper-invalid-mark-'] .fa,
+.validator-container [id*='wrapper-validation-error-'] .fa {
+  color: #e22013;
 }
 .validator-container [id*='wrapper-valid-mark-'] .tooltip-inner {
   background-color: #1cab1c;
