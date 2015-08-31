@@ -5,8 +5,8 @@
   min-width: 294px;
   min-width: 29.4rem;
   display: inline;
-  padding: .2em .6em .3em;
-  font-size: 75%;
+  font-size: 11px;
+  font-size: 0.6875em;
   font-weight: bold;
   line-height: 1;
   color: #ffffff;
@@ -16,12 +16,25 @@
 }
 .invalid-input.field-validation-error {
   background-color: #e22013;
+  padding: 3px 11px;
+  padding: 0.3rem 1.1rem;
 }
 .invalid-input.field-validation-error.break-line {
   display: block;
   margin-top: 4px;
   width: 294px;
   width: 29.4rem;
+}
+.invalid-input.table {
+  display: table;
+  line-height: 1.6;
+  width: 294px;
+  width: 29.4rem;
+  padding: 4px 15px;
+  padding: 0.4rem 1.5rem;
+  margin: -4px 0px 0px 1px;
+  margin: -0.4rem 0 0 0.1rem;
+  border-radius: 4px;
 }
 /*.validator-container {
     position: relative;
