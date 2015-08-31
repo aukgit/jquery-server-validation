@@ -29,8 +29,6 @@
     }
     var pluginName = "serverValidate",
         $divContainers,
-        settings,
-        additionalFields,
         $selfContainer = null,
         defaults = {
             crossDomain: true,
