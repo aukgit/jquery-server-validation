@@ -83,7 +83,26 @@
                             </label>
                             <div class="col-md-10 form-input username" data-prop="username">
                                 <div class="input-validator-container">
-                                    <input class="form-control" data-submit-method="post" data-val="true" data-val-length="The field User name must be a string with a maximum length of 30." data-val-length-max="30" data-val-minlength="The field User name must be a string or array type with a minimum length of &#39;3&#39;." data-val-minlength-min="3" data-val-regex="Username shouldn&#39;t contain any space or punctuation or any alphanumeric character." data-val-regex-pattern="^([A-Za-z]|[A-Za-z0-9_.]+)$" data-val-required="User name is a required field." id="UserName" name="UserName" placeholder="User name*" title="User name*" type="text" value="" />
+                                    <input class="form-control"
+                                           data-submit-method="post"
+                                           data-additional-selectors="[name=__RequestVerificationToken],..."
+                                           data-cross-domain="true"
+                                           data-hide-on-success="true"
+                                           data-disable-on-success="true"
+                                           data-focus-on-fail="true"
+                                           data-dont-send-same-twice="true"
+                                           data-requesting-label="Requesting..."
+                                           data-val-regex-pattern="^([A-Za-z]|[A-Za-z0-9_.]+)$"
+                                           data-is-multiple-requests="true"
+                                           data-val="true"
+                                           data-val-length="The field User name must be a string with a maximum length of 30." data-val-length-max="30" data-val-minlength="The field User name must be a string or array type with a minimum length of &#39;3&#39;."
+                                           data-val-minlength-min="3"
+                                           data-val-regex="Username shouldn&#39;t contain any space or punctuation or any alphanumeric character."
+                                           data-val-required="User name is a required field."
+                                           id="UserName" name="UserName"
+                                           placeholder="User name*"
+                                           title="User name*"
+                                           type="text" value="" />
                                     <div class="validator-container">
                                         <div class="validator"></div>
                                     </div>

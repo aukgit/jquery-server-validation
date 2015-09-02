@@ -18,7 +18,7 @@
  * Modified Date: 27 June 2015
  */
 
-;(function ($, window, document, undefined) {
+; (function ($, window, document, undefined) {
 
     "use strict";
     if (typeof jQuery === 'undefined') {
@@ -38,6 +38,9 @@
             disableInputOnValidation: true,
             focusPersistIfNotValid: true,
             hideOnValidation: false,
+            clientSideValidationRegxPattern: "",
+            submitMethod : "post",
+            url: "",
             messages: {
                 requesting: "Requesting data..."
             },
@@ -45,9 +48,7 @@
                 divContainer: ".form-row",
                 validatorContainer: ".validator-container",
                 validator: ".validator",
-                additionalFields: [
-                    "[name=__RequestVerificationToken]"
-                ]
+                additionalFields: "[name=__RequestVerificationToken]"
             },
             attributes: {
                 url: "data-url",
@@ -88,43 +89,92 @@
         };
 
     // The actual plugin constructor
-    function plugin($divElement, settings, additionalFields) {
+    var plugin = function ($divElement, $input, settings, additionalFields) {
         /// <summary>
         /// Process the div element and 
         /// </summary>
-        /// <param name="element"></param>
-        /// <returns type=""></returns>
+        /// <param name="$divElement">Processing div</param>
+        /// <param name="settings">Settings for that div</param>
+        /// <param name="additionalFields">Additional fields array of jquery element reference.</param>
         this.$element = $divElement;
         this._name = pluginName;
+        this.$input = $input;
         this.settings = settings;
         this.additionalFields = additionalFields;
-
         this.init($divElement);
     }
 
-    function processAdditionalFields($elementContainer, additionalFields) {
+    var processAdditionalFields = function ($elementContainer, additionalFields) {
         var addFields = [];
-        var selectors = additionalFields;
-        for (var i = 0; i < selectors.length; i++) {
-            var selector = selectors[i];
-            var $element = $elementContainer.find(selector);
-            if ($element.length > 0) {
-                var nameOfElement = $element.attr("name");
-                var valueOfElement = $element.attr("value");
-                var pushingElement = {
-                    name: nameOfElement,
-                    value: valueOfElement
-                };
-                addFields.push(pushingElement);
-            }
+        var $element = $elementContainer.find(additionalFields);
+        if ($element.length > 0) {
+            var nameOfElement = $element.attr("name");
+            var valueOfElement = $element.attr("value");
+            var pushingElement = {
+                name: nameOfElement,
+                value: valueOfElement
+            };
+            addFields.push(pushingElement);
         }
         return addFields;
     }
 
+
+    var getSingleSettingItem = function ($input, attribute, settingElement) {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="$input">$input element settings</param>
+        /// <param name="attribute"></param>
+        /// <param name="settingElement"></param>
+        /// <returns type=""></returns>
+        var value = $input.attr(attribute);
+        if (value !== undefined && value !== null) {
+            if (value === "true") {
+                return true;
+            } else if (value === "false") {
+                return false;
+            }
+            return value;
+        } else {
+            return settingElement;
+        }
+    }
+
+    var getSettingfromDiv = function ($input, settings) {
+        /// <summary>
+        /// Pass settings and it's got overwritten by $div attributes
+        /// </summary>
+        /// <param name="$input">$implement div with settings</param>
+        /// <returns type="setting">returns settings</returns>
+        var crossMatch = [
+            { setting: "crossDomain", attr: "data-cross-domain" },
+            { setting: "url", attr: "data-url" },
+            { setting: "clientSideValidationRegxPattern", attr: "data-val-regex-pattern" },
+            { setting: "multipleRequests", attr: "data-is-multiple-requests" },
+            { setting: "hideOnValidation", attr: "data-hide-on-success" },
+            { setting: "disableInputOnValidation", attr: "data-disable-on-success" },
+            { setting: "focusPersistIfNotValid", attr: "data-focus-on-fail" },
+            { setting: "dontSendSameRequestTwice", attr: "data-dont-send-same-twice" },
+            { setting: "focusPersistIfNotValid", attr: "data-focus-on-fail" },
+            { setting: "submitMethod", attr: "data-submit-method" }
+        ];
+        for (var i = 0; i < crossMatch.length; i++) {
+            var config = crossMatch[i];
+            settings[config.setting] = getSingleSettingItem($input, config.attr, settings[config.setting]);
+        }
+        settings.selectors.additionalFields = getSingleSettingItem($input, "data-additional-selectors", settings.selectors.additionalFields);
+        settings.messages.requesting = getSingleSettingItem($input, "data-requesting-label", settings.messages.requesting);
+        return settings;
+    }
+
+
     // Avoid Plugin.prototype conflicts
     $.extend(plugin.prototype, {
         isDebugging: false,
-        additionalFields : [],
+        additionalFields: [],
+        $element: null,
+        $input: null,
         isEmpty: function (variable) {
             return variable === null || variable === undefined || variable.length === 0;
         },
@@ -700,22 +750,28 @@
         /// </summary>
         /// <param name="options"></param>
         /// <returns type=""></returns>
-        var $elementContainer = this;
         $selfContainer = this;
-        var settings;
+        var $elementContainer = this,
+           settingsTemporary = $.extend({}, defaults, options),
+           selectors = settingsTemporary.selectors,
+           additionalFieldsSelectorArray = selectors.additionalFields;
         var additionalFields;
-        if ($elementContainer.isInit !== true) {
-            settings = $.extend({}, defaults, options);
-            var selectors = settings.selectors;
+        if ($elementContainer.isValidationInit !== true) {
             $divContainers = $elementContainer.find(selectors.divContainer);
-            additionalFields = processAdditionalFields($elementContainer, selectors.additionalFields);
+            $elementContainer.isValidationInit = true;
         }
 
         var $containers = $divContainers;
 
         for (var i = 0; i < $containers.length; i++) {
-            var $divElement = $($containers[i]);
-            new plugin($divElement, settings, additionalFields);
+            var $divElement = $($containers[i]),
+                settingTemporary2 = $.extend({}, defaults, options);
+            if ($divElement.attr("data-is-validate") === "true") {
+                var $input = $divElement.find("input");
+                var settings = getSettingfromDiv($input, settingTemporary2);
+                additionalFields = processAdditionalFields($elementContainer, additionalFieldsSelectorArray);
+                new plugin($divElement, $input, settings, additionalFields);
+            }
         }
     };
 
