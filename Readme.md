@@ -110,16 +110,67 @@ A server side validation plugin for any programming language, specially for ASP.
 #### **Html Attribute - Meaning**
 ##### **Container Attribute ([class*='form-row'][data-is-validate='true/false'], **
 ```html
-<div class="form-row" data-is-validate="false">
+<div class="form-row" data-is-validate="true">
   <!-- class .form-row means container started -->        
   <!-- class .form-row name can be changed in the settings of component: find below -->
   <!-- data-is-validate enable disable server side validation -->
+  ....
+</div>
+<div class="form-row" data-is-validate="false">
+  <!-- disable validation since  data-is-validate is false-->
+  ...
+</div>
+```
+##### **Input Attribute : data-url **
+It will override url option in the plugin for specific inputs.
+```html
+<div class="form-row" data-is-validate="true">
+    <!-- enable server side validation since data-is-validate is true-->
+    <div class="input-validator-container">
+        <input id="email" name="email" data-url="/validate/email" />
+        <div class="validator-container">
+            <div class="validator"></div>
+        </div>
+    </div>
+</div>
+```
+##### **Input Attribute : data-hide-on-success **
+Hides the whole .form-row when the input is validated.
+```html
+<div class="form-row" data-is-validate="true">
+    <!-- enable server side validation since data-is-validate is true-->
+    <div class="input-validator-container">
+        <input id="email" data-hide-on-success="true" name="email" data-url="/validate/email" />
+        <div class="validator-container">
+            <div class="validator"></div>
+        </div>
+    </div>
+</div>
+```
+##### **Input Attribute : data-disable-on-success **
+Hides the whole .form-row when the input is validated.
+```html
+<div class="form-row" data-is-validate="true">
+    <!-- enable server side validation since data-is-validate is true-->
+    <div class="input-validator-container">
+        <input id="email" data-disable-on-success="true" name="email" data-url="/validate/email" />
+        <div class="validator-container">
+            <div class="validator"></div>
+        </div>
+    </div>
 </div>
 ```
 ##### **Input Attribute : data-cross-domain **
+Enables cross domain ajax request using jsonp and cors.
 ```html
-<div class="form-row" data-is-validate="false">
-  
+<div class="form-row" data-is-validate="true">
+    <!-- enable server side validation since data-is-validate is true-->
+    <div class="input-validator-container">
+        <input id="email" data-cross-domain="true" name="email" data-url="/validate/email" />
+        <div class="validator-container">
+            <div class="validator"></div>
+        </div>
+    </div>
 </div>
 ```
 #### Javascript References in html
