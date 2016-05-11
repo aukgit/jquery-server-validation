@@ -18,7 +18,8 @@ A server side validation plugin for any programming language, specially for ASP.
     <div class="form-group form-row" data-is-validate="true">
         <label class="control-label" for="">User name *</label>
         <div class="input-validator-container">
-            <input class="form-control" data-url="/validate" />
+            <!-- must use a name with input -->
+            <input id="user-name" name="user-name" class="form-control" data-url="/validate" />
             <div class="validator-container">
                 <div class="validator"></div>
             </div>
@@ -32,7 +33,8 @@ A server side validation plugin for any programming language, specially for ASP.
     <div class="form-group form-row" data-is-validate="true">
         <label class="control-label" for="">User name *</label>
         <div class="input-validator-container">
-            <input class="form-control" data-url="/validate/user" />
+            <!-- must use a name with input -->
+            <input id="user-name" name="user-name" class="form-control" data-url="/validate/user" />
             <div class="validator-container">
                 <div class="validator"></div>
             </div>
@@ -41,7 +43,7 @@ A server side validation plugin for any programming language, specially for ASP.
     <div class="form-group form-row" data-is-validate="true">
         <label class="control-label" for="">Email *</label>
         <div class="input-validator-container">
-            <input class="form-control" data-url="/validate/email" />
+            <input id="email" name="email" class="form-control" data-url="/validate/email" />
             <div class="validator-container">
                 <div class="validator"></div>
             </div>
@@ -57,7 +59,8 @@ A server side validation plugin for any programming language, specially for ASP.
         <!-- this one will not validate since "data-is-validate" is false -->
         <label class="control-label" for="">User name *</label>
         <div class="input-validator-container">
-            <input class="form-control" data-url="/validate/user" />
+            <!-- must use a name with input -->
+            <input id="user-name" name="user-name" class="form-control" data-url="/validate/user" />
             <div class="validator-container">
                 <div class="validator"></div>
             </div>
@@ -67,7 +70,7 @@ A server side validation plugin for any programming language, specially for ASP.
         <!-- this one will validate only -->
         <label class="control-label" for="">Email *</label>
         <div class="input-validator-container">
-            <input class="form-control" data-url="/validate/email" />
+            <input id="email" name="email" class="form-control" data-url="/validate/email" />
             <div class="validator-container">
                 <div class="validator"></div>
             </div>
@@ -90,6 +93,8 @@ A server side validation plugin for any programming language, specially for ASP.
       			</label>
       		<div class="col-md-10 form-input">
       			<div class="input-validator-container">
+      			    <!-- must use a name with input -->
+      			    <!-- client side validation enabled with jquery validate -->
       				<input class="form-control" data-submit-method="post" data-val="true" data-val-length="The field User name must be a string with a maximum length of 30." data-val-length-max="30" data-val-minlength="The field User name must be a string or array type with a minimum length of &#39;3&#39;." data-val-minlength-min="3" data-val-regex="Username shouldn&#39;t contain any space or punctuation or any alphanumeric character." data-val-regex-pattern="^([A-Za-z]|[A-Za-z0-9_.]+)$" data-val-required="User name is a required field." id="UserName" name="UserName" placeholder="User name*" title="User name*" type="text" value=""
 					data-url="**url**" />
 				      <div class="validator-container">
@@ -131,14 +136,18 @@ A server side validation plugin for any programming language, specially for ASP.
 #### Javascript
 ```javascript
     // pick the id container.
-	var $processForm = $.byId("process-form");
+	var $processForm = $.byId("process-form"); // similar to $("#process-form") but faster
 	$processForm.serverValidate({
-            crossDomain: true, // is it possible to cross domain request
+            crossDomain: true, //request cross domain using jsonp
             checkValidationBeforeSendingRequest: true, // if enables client side validation using jquery validate and microosft jquery unobtrusive validation
             dontSendSameRequestTwice: true, // don't request the same previous text to the server, keep only 2 history of text inputs
             disableInputOnValidation: true, // disable the input when validation is successful.
             focusPersistIfNotValid: true, //if true then focus will persist until validated successfully.
-            hideOnValidation: false,
+            hideOnValidation: false, // hide the whole container when validation is successful.
+            url: "", // server validation url, it could be same for all or it can be set by setting data-url attribute in the input. This will be overridden by the input attribute. **check out html attribute meanings.**
+            submitMethod: "post", // get or post, ajax submit method for server side validation
+            eventsNameSpace: "jq.validate.", // event name space
+            $directContainer: [], // container can be given here then the plugin will not search for containers (".form-row") inside the root container. 
             messages: {
                 requesting: "Requesting data..." // this message will be displayed when requesting for server side validation.
             },
