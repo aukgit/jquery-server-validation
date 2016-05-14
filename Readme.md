@@ -4,6 +4,14 @@ A server side validation plugin for any programming language, specially for ASP.
 
 #### [2 mins youtube video on how it works](https://www.youtube.com/watch?v=rzo9GcnUSik&feature=youtu.be "jQuery Server Validation how it works.")
 
+## Why jQuery Server Validation? How does it help?
+**Here are some bullet points :**
+
+ 1. Required **server side validation** with processing and check mark.
+ 2. Required **multiple validation** quickly setup.
+ 3. Validation options can be controlled from html attributes (use input and .form-row container attributes to override options for specific elements) . There is no good solution out there. https://github.com/aukgit/jquery-server-validation/tree/e628bbc311f966330943643ab706cf17e5825772#html-attribute---meaning
+ 4. 
+
 #### CSS References
 
     <link href="content/css/animate-refresh.css" rel="stylesheet" />
@@ -122,7 +130,7 @@ A server side validation plugin for any programming language, specially for ASP.
 </div>
 ```
 ##### **Input Attribute : data-url **
-It will override url option in the plugin for specific inputs.
+It will override url option in the plugin for specific inputs. **Your input should always have** a **name** or **id**. Id is faster than name use it if possible.
 ```html
 <div class="form-row" data-is-validate="true">
     <!-- enable server side validation since data-is-validate is true-->
@@ -228,12 +236,12 @@ Enables cross domain ajax request using jsonp and cors.
                 spinner: "validation-spinner-",
                 error: "validation-error-"
             },
-            response: {
-                message: "Field is valid.",
-                isValid: true,
+            response: { // a sample of response that the server should send.
+                message: "Field is valid.", // Message 
+                isValid: true, //is the sate valid or not.
                 isError: false,
                 errorCode: null,
-                errorMessage: null
+                errorMessage: null // this message will be displayed if (isError) is true.
             },
             events: {
                 iconCreated: function($div, $input, $iconContainer) {
@@ -300,4 +308,44 @@ Enables cross domain ajax request using jsonp and cors.
             }
         });
 
+```
+### Events name
+
+ 1. jq.validate.[name or id of the input].serverProcessStart  
+```javascript
+// ie. if input id is ".form-row">"exampleInput"
+$("#exampleInput").on("jq.validate.exampleInput.serverProcessStart") {
+	// server validation request sent to the server via validation url in the input
+});
+```
+ 2. jq.validate.[name or id of the input].serverProcessRunning
+ 3. jq.validate.[name or id of the input].serverProcessSucceeded
+ 4. jq.validate.[name or id of the input].serverProcessFailed
+ 5. jq.validate.[name or id of the input].serverProcessReturnedAlways
+
+### Validation programmatically trigger and check
+```javascript
+     var $combo = $("select:first"); // getting a combo
+     var $input = $(".form-row:first #exampleInput"); // $("#exampleInput") will be faster and work just fine. It is just to demonstrate where the input should be placed. The input should be placed in side the container ".form-row"
+     $combo.on("change", function () {
+	   $input.trigger("jq.validate.exampleInput.serverProcessStart"); // ask the plugin to communicate with the validate url given in the input or plugin and validate this $input.
+       // to check final validity
+       // we can listen to event called : "jq.validate.$inputIdOrName.serverProcessSucceeded"
+       
+       $input.on("jq.validate.exampleInput.serverProcessSucceeded", function (){
+	       // input is validated.
+       })on("jq.validate.exampleInput.serverProcessStart", function(){
+	       // server validation process sent	       
+       })on("jq.validate.exampleInput.serverProcessRunning", function(){
+	       // while in the server process
+	   })on("jq.validate.exampleInput.serverProcessFailed", function(){
+	       // failed from server
+	   })on("jq.validate.exampleInput.serverProcessReturnedAlways", function(){
+	       // always will be stepped into this event.
+       });
+       // or it can also be checked with jquery validate 
+	   if($input.valid()){ //jquery validate must be included.
+		    // it is valid
+	   }
+     });
 ```

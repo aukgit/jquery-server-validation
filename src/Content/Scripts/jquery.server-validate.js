@@ -39,7 +39,6 @@
             disableInputOnValidation: true,
             focusPersistIfNotValid: true,
             hideOnValidation: false,
-            clientSideValidationRegxPattern: "",
             submitMethod: "post", // get or post
             eventsNameSpace: "jq.validate.",
             $directContainer: [],
@@ -116,7 +115,13 @@
 
     var processAdditionalFields = function ($elementContainer, additionalFields) {
         var addFields = [];
-        var $elements = $elementContainer.find(additionalFields);
+        var $elements = [];
+        var isEmpty = $elementContainer === undefined || $elementContainer === null || $elementContainer.length === 0;
+        if (!isEmpty) {
+            $elements = $elementContainer.find(additionalFields);
+        } else {
+            $elements = $(additionalFields);
+        }
         if ($elements.length > 0) {
             for (var i = 0; i < $elements.length; i++) {
                 var $element = $($elements[i]);
@@ -164,7 +169,6 @@
         var crossMatch = [
             { setting: "crossDomain", attr: "data-cross-domain" },
             { setting: "url", attr: "data-url" },
-            { setting: "clientSideValidationRegxPattern", attr: "data-val-regex-pattern" },
             { setting: "multipleRequests", attr: "data-is-multiple-requests" },
             { setting: "hideOnValidation", attr: "data-hide-on-success" },
             { setting: "disableInputOnValidation", attr: "data-disable-on-success" },
@@ -432,9 +436,13 @@
             return this.$input;
         },
         getUrl: function () {
-            var attrs = this.getAttributes(),
-                $input = this.getInput();
-            return $input.attr(attrs.url);
+            if (this.isEmpty(this._url)) {
+                var attrs = this.getAttributes(),
+                    $input = this.getInput();
+
+                this._url = $input.attr(attrs.url);
+            }
+            return this._url;
         },
         processDiv: function (plugin, $div) {
             //var $self = $selfContainer;
@@ -891,7 +899,7 @@
             /// Process if response has valid = true.
             /// </summary>
             /// <param name="$input"></param>
-            /// <param name="response">Reponse json</param>
+            /// <param name="response">Response json</param>
             // response is valid
             // spinner is already hidden from sendRequest method.
             //response: {
@@ -973,6 +981,7 @@
         /// <param name="options"></param>
         /// <returns type=""></returns>
         $selfContainer = this;
+        var isEmptyContainer = $selfContainer === undefined || $selfContainer === null || $selfContainer.length === 0;
         var $elementContainer = this,
            settingsTemporary = $.extend({}, defaults, options),
            selectors = settingsTemporary.selectors,
@@ -992,7 +1001,7 @@
             //direct container element selected
             $containers = settingsTemporary.$directContainer;
         }
-
+        var pluginAttacherElements = new Array($containers.length);
         for (var i = 0; i < $containers.length; i++) {
             var $divElement = $($containers[i]),
                 settingTemporary2 = $.extend({}, defaults, options);
@@ -1000,7 +1009,20 @@
                 var $input = $divElement.find("input");
                 var settings = getSettingfromDiv($input, settingTemporary2);
                 additionalFields = processAdditionalFields($elementContainer, additionalFieldsSelectorArray);
-                new plugin($divElement, $input, settings, additionalFields);
+                var creatingPlugin = new plugin($divElement, $input, settings, additionalFields);
+                pluginAttacherElements[i] = {
+                    plugin: creatingPlugin,
+                    additionalFields: additionalFields,
+                    $divContainer: $divElement,
+                    $input: $input,
+                    options: settings
+                };
+            }
+        }
+        if (isEmptyContainer === false && $containers.length > 0) {
+            $selfContainer["plugin." + pluginName] = {
+                self: this,
+                attachers: pluginAttacherElements
             }
         }
     };
