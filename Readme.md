@@ -9,8 +9,8 @@ A server side validation plugin for any programming language, specially for ASP.
 
  1. Required **server side validation** with processing and check mark.
  2. Required **multiple validation** quickly setup.
- 3. Validation options can be controlled from html attributes (use input and .form-row container attributes to override options for specific elements) . There is no good solution out there. https://github.com/aukgit/jquery-server-validation/tree/e628bbc311f966330943643ab706cf17e5825772#html-attribute---meaning
- 4. 
+ 3. Validation options can be controlled from html attributes (use input and .form-row container attributes to override options for specific elements) . There is no good solution out [there](https://github.com/aukgit/jquery-server-validation/tree/e628bbc311f966330943643ab706cf17e5825772#html-attribute---meaning).
+ 4. **ASP.NET Anti-forgery token will be sent and validated with ajax request. ** If not present then will not be sent.
 
 #### CSS References
 
