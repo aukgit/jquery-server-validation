@@ -309,7 +309,7 @@ Enables cross domain ajax request using jsonp and cors.
         });
 
 ```
-### Events name
+### Events name 
 
  1. jq.validate.[name or id of the input].serverProcessStart  
 ```javascript
