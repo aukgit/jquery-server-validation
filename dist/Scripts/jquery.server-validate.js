@@ -7,22 +7,19 @@
 /*!
  * jQuery Server Validate 1.0 
  * (a plugin for ASP.NET MVC or any server side programming language)
+ * Code : https://github.com/aukgit/jquery-server-validation
  * 
  * Copyright (c) 2015 by 
  * Md. Alim Ul Karim, Bangladesh, Dhaka.
- * me{at}alimkarim.com
- *
- * Performance test http://jsperf.com/jquery-specific-performance-test-with-non-specific
+ * me{at}alimkarim.com   
+ * 
+ * Performance test http://jsperf.com/jquery-specific-performance-test-with-non-specific 
  * by Md. Alim Ul karim 
  * Date: 19 June 2015
  * Modified Date: 27 June 2015
  */
 
-;
-
-
-
-(function ($, window, document, undefined) {
+; (function ($, window, document, undefined) {
 
     "use strict";
     if (typeof jQuery === 'undefined') {
@@ -33,9 +30,8 @@
     }
     var pluginName = "serverValidate",
         $divContainers,
-        settings,
-        additionalFields,
         $selfContainer = null,
+        $allInputs = [],
         defaults = {
             crossDomain: true,
             multipleRequests: true,
@@ -44,6 +40,15 @@
             disableInputOnValidation: true,
             focusPersistIfNotValid: true,
             hideOnValidation: false,
+            submitMethod: "post", // get or post
+            eventsNameSpace: "jq.validate.",
+            $directContainer: [],
+            eventsObject: null, //this object will collect all the events
+            url: "",
+            formSelector: "",
+            $formElement: [],
+            triggerValidationBeforeFormSubmit: true,
+            $submitButton: [],
             messages: {
                 requesting: "Requesting data..."
             },
@@ -51,9 +56,7 @@
                 divContainer: ".form-row",
                 validatorContainer: ".validator-container",
                 validator: ".validator",
-                additionalFields: [
-                    "[name=__RequestVerificationToken]"
-                ]
+                additionalFields: "[name=__RequestVerificationToken]"
             },
             attributes: {
                 url: "data-url",
@@ -93,25 +96,42 @@
             }
         };
 
+
+
     // The actual plugin constructor
-    function plugin($divElement) {
+    var plugin = function ($divElement, $input, settings, additionalFields) {
         /// <summary>
         /// Process the div element and 
         /// </summary>
-        /// <param name="element"></param>
-        /// <returns type=""></returns>
+        /// <param name="$divElement">Processing div</param>
+        /// <param name="settings">Settings for that div</param>
+        /// <param name="additionalFields">Additional fields array of jquery element reference.</param>
         this.$element = $divElement;
         this._name = pluginName;
+        this.$input = $input;
+        this.settings = settings;
+        this.additionalFields = additionalFields;
+
+
+
+        this.events.plugin = this;
+        this.events.names.plugin = this;
+
         this.init($divElement);
     }
 
-    function processAdditionalFields($elementContainer) {
+    var processAdditionalFields = function ($elementContainer, additionalFields) {
         var addFields = [];
-        var selectors = window.settings.selectors.additionalFields;
-        for (var i = 0; i < selectors.length; i++) {
-            var selector = selectors[i];
-            var $element = $elementContainer.find(selector);
-            if ($element.length > 0) {
+        var $elements = [];
+        var isEmpty = $elementContainer === undefined || $elementContainer === null || $elementContainer.length === 0;
+        if (!isEmpty) {
+            $elements = $elementContainer.find(additionalFields);
+        } else {
+            $elements = $(additionalFields);
+        }
+        if ($elements.length > 0) {
+            for (var i = 0; i < $elements.length; i++) {
+                var $element = $($elements[i]);
                 var nameOfElement = $element.attr("name");
                 var valueOfElement = $element.attr("value");
                 var pushingElement = {
@@ -120,23 +140,82 @@
                 };
                 addFields.push(pushingElement);
             }
+
         }
         return addFields;
     }
 
+
+    var getSingleSettingItem = function ($input, attribute, settingElement) {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="$input">$input element settings</param>
+        /// <param name="attribute"></param>
+        /// <param name="settingElement"></param>
+        /// <returns type=""></returns>
+        var value = $input.attr(attribute);
+        if (value !== undefined && value !== null) {
+            if (value === "true") {
+                return true;
+            } else if (value === "false") {
+                return false;
+            }
+            return value;
+        } else {
+            return settingElement;
+        }
+    }
+
+    var getSettingfromDiv = function ($input, settings) {
+        /// <summary>
+        /// Pass settings and it's got overwritten by $div attributes
+        /// </summary>
+        /// <param name="$input">$implement div with settings</param>
+        /// <returns type="setting">returns settings</returns>
+        var crossMatch = [
+            { setting: "crossDomain", attr: "data-cross-domain" },
+            { setting: "url", attr: "data-url" },
+            { setting: "multipleRequests", attr: "data-is-multiple-requests" },
+            { setting: "hideOnValidation", attr: "data-hide-on-success" },
+            { setting: "disableInputOnValidation", attr: "data-disable-on-success" },
+            { setting: "focusPersistIfNotValid", attr: "data-focus-on-fail" },
+            { setting: "eventsObject", attr: "data-events-object" },
+            { setting: "dontSendSameRequestTwice", attr: "data-dont-send-same-twice" },
+            { setting: "focusPersistIfNotValid", attr: "data-focus-on-fail" },
+            { setting: "formSelector", attr: "data-form-selector" }, // selecting the form
+            { setting: "triggerValidationBeforeFormSubmit", attr: "data-trigger-validation-before-form-submit" },
+            { setting: "focusPersistIfNotValid", attr: "data-focus-on-fail" },
+            { setting: "submitMethod", attr: "data-submit-method" }
+        ];
+        for (var i = 0; i < crossMatch.length; i++) {
+            var config = crossMatch[i];
+            settings[config.setting] = getSingleSettingItem($input, config.attr, settings[config.setting]);
+        }
+        settings.selectors.additionalFields = getSingleSettingItem($input, "data-additional-selectors", settings.selectors.additionalFields);
+        settings.messages.requesting = getSingleSettingItem($input, "data-requesting-label", settings.messages.requesting);
+        return settings;
+    }
+
+
     // Avoid Plugin.prototype conflicts
     $.extend(plugin.prototype, {
         isDebugging: false,
+        additionalFields: [],
+        $element: null,
+        $input: null,
         isEmpty: function (variable) {
             return variable === null || variable === undefined || variable.length === 0;
         },
         init: function ($divElement) {
+
             if (this.isValidForProcessing($divElement)) {
-                this.processDiv($divElement);
+                this.events.bindAllEvents(this);
+                this.processDiv(this, $divElement);
             }
         },
         getSettings: function () {
-            return window.settings;
+            return this.settings;
         },
         isMultipleRequestAllowed: function () {
             return this.getSettings().multipleRequests;
@@ -150,6 +229,204 @@
         dontSendSameRequestTwice: function () {
             return this.getSettings().dontSendSameRequestTwice;
         },
+
+        events: {
+            names: {
+                serverProcessStart: "serverProcessStart",
+                serverProcessSucceeded: "serverProcessSucceeded",
+                serverProcessFailed: "serverProcessFailed",
+                serverProcessRunning: "serverProcessRunning",
+                serverProcessReturnedAlways: "serverProcessReturnedAlways",
+                serverAllRequestComplete: "serverAllRequestComplete",
+                hideIcons: "hideIcons",
+                createIcon: "createIcon",
+                showingSpinnerIcon: "showingSpinnerIcon",
+                typingStart: "typingStart",
+                getName: function (plugin, nameOfEvent) {
+                    var settings = plugin.getSettings(),
+                        nameSpace = settings.eventsNameSpace,
+                        inputId = plugin.getInputNameOrId(plugin.$input),
+                        finalName = nameSpace + inputId + "." + nameOfEvent;
+                    //console.log(finalName);
+                    return finalName;
+                }
+            },
+            getEventsCommonAttributes: function (plugin, nameOfEvent, additionalAttributes) {
+                /// <summary>
+                /// Returns a json with a combination of additional json attributes.
+                /// event = {
+                ///     id: inputId,
+                ///     name: $input.attr("name"),
+                ///     $input: $input,
+                ///     $divContainer: $div,
+                ///     eventName: nameOfEvent,
+                ///     finalEventName: finalEventName,
+                ///     plugin: plugin,
+                ///     settings: settings
+                /// }
+                /// </summary>
+                /// <param name="nameOfEvent">Name of the event, eg. serverProcessStart</param>
+                /// <param name="additionalAttributes">Json object</param>
+                var $div = plugin.$element,
+                    $input = plugin.$input,
+                    settings = plugin.getSettings(),
+                    inputId = plugin.getInputNameOrId(plugin.$input),
+                    finalEventName = this.names.getName(plugin, nameOfEvent);
+
+                var event = this[finalEventName];
+                if (plugin.isEmpty(event)) {
+                    //console.log("Event Created: " + finalEventName);
+                    event = {
+                        id: inputId,
+                        name: $input.attr("name"),
+                        $input: $input,
+                        $divContainer: $div,
+                        eventName: nameOfEvent,
+                        finalEventName: finalEventName,
+                        plugin: plugin,
+                        settings: settings
+                    };
+
+                    event = $.extend({}, event, additionalAttributes);
+
+                    this[finalEventName] = event;
+                }
+
+                return event;
+
+            },
+
+            bindAllEvents: function (plugin) {
+                /// <summary>
+                /// Bind all events
+                /// </summary>
+
+
+                var isInTestingMode = plugin.isDebugging,
+                    evtNames = this.names,
+                    //createIconEvtName = evtNames.getName(evtNames.createIcon),
+                    //hideIconEvtName = evtNames.getName(evtNames.hideIcons),
+                    serverStartEvtName = evtNames.getName(plugin, evtNames.serverProcessStart),
+                    serverSuccessEvtName = evtNames.getName(plugin, evtNames.serverProcessSucceeded),
+                    serverFailEvtName = evtNames.getName(plugin, evtNames.serverProcessFailed),
+                    serverAlwaysEvtName = evtNames.getName(plugin, evtNames.serverProcessReturnedAlways),
+                    serverAllRequestComplete = evtNames.getName(plugin, evtNames.serverAllRequestComplete),
+                    ajaxRequestName = pluginName + ".ajaxRequest";
+
+
+                //bind events
+                var $div = plugin.$element,
+                    $input = plugin.$input,
+                    url = plugin.getUrl(),
+                    sendRequest = plugin.sendRequest,
+                    settings = plugin.getSettings(),
+                    isRequstSent = false,
+                    cachedResponse;
+
+
+                // server events
+
+                // start
+
+                var serverStartEventData = this.getEventsCommonAttributes(plugin, evtNames.serverProcessStart, {
+                    url: url
+                });
+                //serverStartEventData contains a json modifed only the url property.
+                //  event = {
+                //      id: inputId,
+                //      name: $input.attr("name"),
+                //      $input: $input,
+                //      $divContainer: $div,
+                //      eventName: nameOfEvent,
+                //      finalEventName: finalEventName,
+                //      plugin: plugin,
+                //      settings: settings
+                //  }
+                $input.on(serverStartEvtName, serverStartEventData, function (evt) {
+                    //console.log(evt.data.finalEventName);
+                    var fields = plugin.concatAdditionalFields($input);
+                    sendRequest(plugin, $div, $input, url, fields);
+                });
+
+
+                $div.on(serverStartEvtName, serverStartEventData, function (evt) {
+                    //console.log("div: " + evt.data.finalEventName);
+                    //$input.trigger(serverStartEvtName);
+                });
+
+
+                // success
+                var serverSuccessEventData = this.getEventsCommonAttributes(plugin, evtNames.serverProcessSucceeded, {
+                    url: url
+                });
+                $input.on(serverSuccessEvtName, serverSuccessEventData, function (evt, response) {
+                    //console.log(evt.data.finalEventName);
+                    cachedResponse = response;
+                    if (isInTestingMode) {
+                        console.log(response);
+                    }
+                    evt.data.response = response;
+                    plugin.hideAllIcons($div); // hide all the icons
+                    plugin.markAsProcessing($div, false);
+                    plugin.processResponse($input, response);
+                    $div.attr("data-icon-added", "true");
+                    //icons show/hide
+                    plugin.hideSpinner($input);
+                });
+
+                $div.on(serverSuccessEvtName, serverSuccessEventData, function (evt, response) {
+                    evt.data.response = cachedResponse;
+                    //console.log("div: " + evt.data.finalEventName);
+                    //$input.trigger(serverSuccessEvtName, [response]);
+
+                });
+
+                // failed
+                var serverFailEventData = this.getEventsCommonAttributes(plugin, evtNames.serverProcessFailed, {
+                    url: url
+                });
+                $input.on(serverFailEvtName, serverFailEventData, function (evt, jqXHR, textStatus, exceptionMessage) {
+                    //console.log(evt.data.finalEventName);
+                    plugin.hideAllIcons($div); // hide all the icons
+                    plugin.hideSpinner($input);
+                    plugin.errorProcess($div, $input, jqXHR, textStatus, exceptionMessage, url);
+                    //console.log("Request failed: " + exceptionMessage + ". Url : " + url);
+                });
+
+                $div.on(serverFailEvtName, serverFailEventData, function (evt, jqXHR, textStatus, exceptionMessage) {
+                    //console.log("div: " + evt.data.finalEventName);
+                    //$input.trigger(serverFailEvtName, [jqXHR, textStatus, exceptionMessage]);
+                });
+
+                // always
+                var serverAlwaysEventData = this.getEventsCommonAttributes(plugin, evtNames.serverProcessReturnedAlways, {
+                    url: url
+                });
+                $input.on(serverAlwaysEvtName, serverAlwaysEventData, function (evt) {
+                    evt.data.response = cachedResponse;
+                    plugin.markAsProcessing($div, false);
+                    plugin.hideSpinner($input);
+
+                    //console.log(evt.data.finalEventName);
+                    //console.log(evt.data);
+
+                });
+                $input.on(serverAllRequestComplete, function (evt) {
+                    console.log(serverAllRequestComplete);
+                    plugin.hideSpinner($input);
+                    //if (settings.triggerValidationBeforeFormSubmit === true && settings.$formElement.length > 0) {
+                    //    settings.$formElement.submit();
+                    //}
+                });
+                $div.on(serverAlwaysEvtName, serverAlwaysEventData, function (evt) {
+                    //evt.data.response = cachedResponse;
+                    //console.log("div: " + evt.data.finalEventName);
+                    //$input.trigger(serverAlwaysEvtName);
+                });
+
+            }
+        },
+
         getAttributes: function () {
             return this.getSettings().attributes;
         },
@@ -186,16 +463,20 @@
             return this.$input;
         },
         getUrl: function () {
-            var attrs = this.getAttributes(),
-                $input = this.getInput();
-            return $input.attr(attrs.url);
+            if (this.isEmpty(this._url)) {
+                var attrs = this.getAttributes(),
+                    $input = this.getInput();
+
+                this._url = $input.attr(attrs.url);
+            }
+            return this._url;
         },
-        processDiv: function ($div) {
+        processDiv: function (plugin, $div) {
             //var $self = $selfContainer;
             var $input = this.getInput($div),
                 url = this.getUrl();
             //this.test();
-            this.inputProcessWithBlurEvent($div, $input, url);
+            this.inputProcessWithBlurEvent(plugin, $div, $input, url);
 
         },
         test: function () {
@@ -226,53 +507,83 @@
             }
             return returnStatement;
         },
-        inputProcessWithBlurEvent: function ($div, $input, url) {
+        hideAllIcons: function ($div) {
             var self = this,
-                settings = this.getSettings(),
-                isIconsVisible = true;
-            $input.on("blur", function (evt) {
-                self.blurEvent(evt, $div, self, $input, url);
-                isIconsVisible = true;
-            });
-            $input.on("keypress", function () {
+                $input = self.getInput();
+            $div.removeAttr("data-icon-added");
+            self.hideInvalidIcon($input);
+            self.hideSpinner($input);
+            self.hideErrorIcon($input);
+            self.hideErrorIcon($input);
+            self.hideValidIcon($input);
+        },
+
+        // processing
+        inputProcessWithBlurEvent: function (self, $div, $input, url) {
+            /// <summary>
+            /// Bind keypress event with input and it will trigger server validation event
+            /// if every condition from settings meets. 
+            /// </summary>
+            /// <param name="self" type="type"></param>
+            /// <param name="$div" type="type"></param>
+            /// <param name="$input" type="type"></param>
+            /// <param name="url" type="type"></param>
+            var //settings = this.getSettings(),
+                isIconsVisible = true,
+                eventsNames = self.events.names,
+                serverProcessStartEvent = eventsNames.getName(self, eventsNames.serverProcessStart);
+
+            var hideIcons = function () {
                 if (isIconsVisible === true) {
-                    $div.removeAttr("data-icon-added");
-                    self.hideInvalidIcon($input);
-                    self.hideSpinner($input);
-                    self.hideErrorIcon($input);
-                    self.hideErrorIcon($input);
-                    self.hideValidIcon($input);
+                    self.hideAllIcons($div);
                     isIconsVisible = false;
                 }
-            });
-        },
-        blurEvent: function (event, $div, self, $input, url) {
-            var isRequstValid = !self.isInProcessingMode($div) || self.isMultipleRequestAllowed();
-            // if we are allowing to send multiple request while one is already being processing in the server.
-            if (isRequstValid) {
-                var $inputNew = $input;///$(this);
-                var isDuplicateRequestAllowed = self.dontSendSameRequestTwice() && !self.isPreviousRequestIsSame($div, $inputNew, url);
-                isRequstValid = isDuplicateRequestAllowed || !self.dontSendSameRequestTwice();
-                // check if same request is allowed to send twice.
+            }
+            var blurEvent = function (event, url) {
+                var isRequstValid = !self.isInProcessingMode($div) || self.isMultipleRequestAllowed();
+                // if we are allowing to send multiple request while one is already being processing in the server.
                 if (isRequstValid) {
-
-                    // if validation request before sending request.
-                    var validationRequires = self.isInputValidationRequirestoSendRequest();
-
-                    // is input needed to be valid before send the request.
-                    isRequstValid = (validationRequires && $inputNew.valid()) || !validationRequires;
-
+                    var isDuplicateRequestAllowed = self.dontSendSameRequestTwice() && !self.isPreviousRequestIsSame($div, $input, url);
+                    isRequstValid = isDuplicateRequestAllowed || !self.dontSendSameRequestTwice();
+                    // check if same request is allowed to send twice.
                     if (isRequstValid) {
-                        var fields = self.concatAdditionalFields($inputNew);
 
-                        self.sendRequest($div, $inputNew, url, fields);
-                    }
-                    if (self.getSettings().focusPersistIfNotValid) {
-                        self.focusIfnotValid($inputNew);
+                        // if validation request before sending request.
+                        var validationRequires = self.isInputValidationRequirestoSendRequest();
+
+                        // is input needed to be valid before send the request.
+                        isRequstValid = (validationRequires && $input.valid()) || !validationRequires;
+
+                        if (isRequstValid) {
+                            hideIcons();
+                            isIconsVisible = true;
+                            $input.trigger(serverProcessStartEvent);
+                        }
+                        if (self.getSettings().focusPersistIfNotValid) {
+                            self.focusIfnotValid($input);
+                        }
                     }
                 }
-            }
+            };
+
+            var timeOutMethod;
+            //$input.on("blur", function (evt) {
+
+            //});
+
+            $input.on("keypress", function (evt, delay) {
+                if (!self.isEmpty(timeOutMethod)) {
+                    clearTimeout(timeOutMethod);
+                }
+                if (self.isEmpty(delay)) {
+                    delay = 750;
+                }
+                timeOutMethod = setTimeout(function () {
+                    blurEvent(evt, url);
+                }, delay);
+            });
         },
+
         focusIfnotValid: function ($input, force) {
             /// <summary>
             /// Focus on the input if not valid.
@@ -290,7 +601,7 @@
             }
         },
         concatAdditionalFields: function ($input) {
-            var addFields = window.additionalFields.slice();
+            var addFields = this.additionalFields.slice();
             var fields = {
                 name: $input.attr("name"),
                 value: $input.val()
@@ -298,65 +609,72 @@
             addFields.push(fields);
             return addFields;
         },
-        getSubmitMethod: function ($input) {
+        getSubmitMethod: function () {
             /// <summary>
             /// Returns submit method is it post or get
             /// </summary>
             /// <param name="$div"></param>
             /// <returns type=""></returns>
-            var attrs = this.getSettings().attributes;
-            return $input.attr(attrs.submitMethod);
+            return this.getSettings().submitMethod;
         },
         abortPreviousAjaxRequest: function ($input) {
             /// <summary>
             /// Abort previous ajax request and hide all the icons
             /// </summary>
             /// <returns type=""></returns>
-            this.showSpinner($input);
-            this.hideInvalidIcon($input);
-            this.hideErrorIcon($input);
-            this.hideErrorIcon($input);
-            this.hideValidIcon($input);
             if (!this.isEmpty(this.ajaxRequest)) {
+                var $div = this.$element;
                 this.ajaxRequest.abort();
+                this.hideAllIcons($div);
+                this.showSpinner($input);
+                $div.attr("data-icon-added", "true");
             }
         },
-        sendRequest: function ($div, $input, url, sendingFields) {
-
-            var method = this.getSubmitMethod($input),
-                self = this,
-                isInTestingMode = self.isDebugging,
-                events = self.getSettings().events;
-            if (!this.isEmpty(events.beforeSendingRequest)) {
+        sendRequest: function (self, $div, $input, url, sendingFields) {
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="$div"></param>
+            /// <param name="$input"></param>
+            /// <param name="url"></param>
+            /// <param name="sendingFields"></param>
+            var method = self.getSubmitMethod($input),
+                settings = self.getSettings(),
+                isCrossDomain = settings.crossDomain,
+                events = settings.events;
+            if (!self.isEmpty(events.beforeSendingRequest)) {
                 events.beforeSendingRequest($div, $input, url, sendingFields);
             }
             //icons show/hide
-            $div.attr("data-icon-added", "true");
             // Abort previous ajax request and hide all the icons
-            this.abortPreviousAjaxRequest($input);
+            self.abortPreviousAjaxRequest($input);
 
             self.markAsProcessing($div, true);
             self.setCurrentTextForNexttimeChecking($input);
-            this.ajaxRequest = jQuery.ajax({
-                method: method, // by default "GET"
-                url: url,
-                data: sendingFields, // PlainObject or String or Array
-                crossDomain: true,
-                dataType: "JSON" //, // "Text" , "HTML", "xml", "script" 
-            }).done(function (response) {
-                if (isInTestingMode) {
-                    console.log(response);
-                }
-                self.markAsProcessing($div, false);
-                self.processResponse($input, response);
-                //icons show/hide
-                self.hideSpinner($input);
-            }).fail(function (jqXHR, textStatus, exceptionMessage) {
-                self.hideSpinner($input);
-                self.errorProcess($div, $input, jqXHR, textStatus, exceptionMessage, url);
-                console.log("Request failed: " + exceptionMessage + ". Url : " + url);
-            });
+            self.hideAllIcons($div); // hide all the icons
 
+            var evtNames = self.events.names,
+                successEventName = evtNames.getName(self, evtNames.serverProcessSucceeded),
+                failedEventName = evtNames.getName(self, evtNames.serverProcessFailed),
+                alwaysEventName = evtNames.getName(self, evtNames.serverProcessReturnedAlways),
+                ajaxProperties = {
+                    method: method, // by default "GET"
+                    url: url,
+                    data: sendingFields, // PlainObject or String or Array
+                    crossDomain: isCrossDomain,
+                    dataType: "json" //, // "Text" , "HTML", "xml", "script" 
+                };
+
+            if (isCrossDomain == true) {
+                ajaxProperties.dataType = "jsonp";
+            }
+            self.ajaxRequest = $.ajax(ajaxProperties).done(function (response) {
+                $input.trigger(successEventName, [response]);
+            }).fail(function (jqXHR, textStatus, exceptionMessage) {
+                $input.trigger(failedEventName, [jqXHR, textStatus, exceptionMessage]);
+            }).always(function () {
+                $input.trigger(alwaysEventName);
+            });
 
         },
         errorProcess: function ($div, $input, jqXHR, textStatus, exceptionMessage, url) {
@@ -406,8 +724,8 @@
         },
         setMessageOnIcons: function ($icon, message) {
             var $span = $icon.find("a").attr("title", message)
-                             .attr("data-original-title", message)
-                             .find("span");
+                .attr("data-original-title", message)
+                .find("span");
             $span.attr("title", message)
                 .attr("data-display", message);
         },
@@ -429,18 +747,16 @@
                 finalId = idPrefix + id;
 
             var html = "<div class='validation-icon-wrapper' id='" + wrapperName + finalId + "'><a data-toggle='tooltip' id='" + finalId + "'" +
-               "title='" + toolTipmessage + "' " +
-               "data-original-title='" + toolTipmessage + "' " +
-               "class='tooltip-show'>" +
-                    "<span data-display='" + toolTipmessage + "' " +
-                        "class='" + icon + "' " +
-                        "title='" + toolTipmessage + "'></span>" +
-                        "</a></div>";
+                "title='" + toolTipmessage + "' " +
+                "data-original-title='" + toolTipmessage + "' " +
+                "class='tooltip-show'>" +
+                "<span data-display='" + toolTipmessage + "' " +
+                "class='" + icon + "' " +
+                "title='" + toolTipmessage + "'></span>" +
+                "</a></div>";
             $validator.append(html);
             var $created = $.byId(wrapperName + finalId); // get the whole container
             $.byId(finalId).tooltip();
-
-
             if (!this.isEmpty(events.iconCreated)) {
                 events.iconCreated($div, $input, $created);
             }
@@ -577,10 +893,10 @@
             this.animateOff($spinner);
         },
         animateOn: function ($object) {
-            $object.fadeIn("slow");
+            $object.removeClass("hide");
         },
         animateOff: function ($object) {
-            $object.hide();
+            $object.addClass("hide");
         },
 
         processResponse: function ($input, response) {
@@ -621,7 +937,7 @@
             /// Process if response has valid = true.
             /// </summary>
             /// <param name="$input"></param>
-            /// <param name="response">Reponse json</param>
+            /// <param name="response">Response json</param>
             // response is valid
             // spinner is already hidden from sendRequest method.
             //response: {
@@ -650,7 +966,7 @@
                 .attr("data-message", msg);
             $input.attr("data-server-validated", validation)
                 .attr("data-message", msg);
-
+            $input.removeClass("input-validation-error");
             if (settings.hideOnValidation) {
                 $div.attr("data-is-hidden", validation);
                 $div.hide('slow');
@@ -678,17 +994,52 @@
                 events.invalidBefore($div, $input, response);
             }
 
-            this.showInvalidIcon($input, response.errorCode + " : " + response.errorMessage);
+            this.showInvalidIcon($input, response.errorMessage);
             $div.attr("data-server-validated", validation)
                 .attr("data-message", msg);
             $input.attr("data-server-validated", validation)
                 .attr("data-message", msg);
+            $input.addClass("input-validation-error");
             if (settings.focusPersistIfNotValid) {
                 this.focusIfnotValid($input, true);
             }
             if (!this.isEmpty(events.invalidAfter)) {
                 events.invalidAfter($div, $input, response);
             }
+        },
+        isInvalid: function (plugin) {
+            /// <summary>
+            /// Returns true/false based on input if the input  invalid.
+            /// </summary>
+            var $input = plugin.getInput();
+            return $input.attr("data-server-validated") !== "true" || !$input.valid();
+        },
+        sendServerValidationRequestOnlyIfInputInvalidOrNotProcessed: function (plugin) {
+            /// <summary>
+            /// Only send request to the server if input is not processed or invalid.
+            /// </summary>
+            /// <param name="plugin" type="type"></param>
+            /// <returns type="">Return 1 when trigers validation. Returns 0 when it is already valid.</returns>
+            var $input = plugin.getInput();
+            if (plugin.isInvalid(plugin) === true) {
+                var events = plugin.events,
+                  evtNames = events.names,
+                  serverProcessStartEventName = evtNames.getName(plugin, evtNames.serverProcessStart);
+                // TODO : check the other validation 
+                $input.trigger(serverProcessStartEventName); // trigger right away
+                return 1;
+            }
+            return 0;
+        },
+        getEventNameOfServerAlways: function (plugin) {
+            /// <summary>
+            /// Send the requst to the server to validate the request.
+            /// </summary>
+            var events = plugin.events,
+                evtNames = events.names,
+                serverAlwaysEvtName = evtNames.getName(plugin, evtNames.serverProcessReturnedAlways);
+
+            return serverAlwaysEvtName;
         }
     });
 
@@ -702,21 +1053,150 @@
         /// </summary>
         /// <param name="options"></param>
         /// <returns type=""></returns>
-        var $elementContainer = this;
         $selfContainer = this;
-        if ($elementContainer.isInit !== true) {
-            window.settings = $.extend({}, defaults, options);
-            var selectors = window.settings.selectors;
-            window.$divContainers = $elementContainer.find(selectors.divContainer);
-            window.additionalFields = processAdditionalFields($elementContainer);
+        var isEmptyContainer = $selfContainer === undefined || $selfContainer === null || $selfContainer.length === 0,
+           $elementContainer = this,
+           settingsTemporary = $.extend({}, defaults, options),
+           selectors = settingsTemporary.selectors,
+           additionalFieldsSelectorArray = selectors.additionalFields;
+        var additionalFields;
+        if ($elementContainer.isValidationInit !== true) {
+            if (settingsTemporary.$directContainer.length === 0) {
+                $divContainers = $elementContainer.find(selectors.divContainer);
+                $elementContainer.isValidationInit = true;
+            }
         }
 
-        var $containers = window.$divContainers;
-
-        for (var i = 0; i < $containers.length; i++) {
-            var $divElement = $($containers[i]);
-            new plugin($divElement, options);
+        var $containers = null,
+            isEmpty = function (variable) {
+                return variable === undefined || variable === null || variable.length === 0 || variable === "";
+            };
+        if (settingsTemporary.$directContainer.length === 0) {
+            $containers = $divContainers;
+        } else {
+            //direct container element selected
+            $containers = settingsTemporary.$directContainer;
         }
+
+
+        var pluginAttacherElements = [];
+        var i;
+        for (i = 0; i < $containers.length; i++) {
+            var $divElement = $($containers[i]),
+                settingTemporary2 = $.extend({}, defaults, options);
+            if ($divElement.attr("data-is-validate") === "true") {
+                var $input = $divElement.find("input");
+                var settings = getSettingfromDiv($input, settingTemporary2);
+
+                additionalFields = processAdditionalFields($elementContainer, additionalFieldsSelectorArray);
+                $allInputs.push($input);
+                var creatingPlugin = new plugin($divElement, $input, settings, additionalFields),
+                    pluginAttacher = {
+                        plugin: creatingPlugin,
+                        additionalFields: additionalFields,
+                        $divContainer: $divElement,
+                        $input: $input,
+                        options: settings
+                    };
+                pluginAttacherElements.push(pluginAttacher);
+            }
+        }
+
+
+        if (isEmptyContainer === false && $containers.length > 0) {
+            $selfContainer["plugin." + pluginName] = {
+                self: this,
+                attachers: pluginAttacherElements
+            }
+        }
+        //form selector
+        var $form = settingsTemporary.$formElement;
+        if (settingsTemporary.triggerValidationBeforeFormSubmit === true) {
+            if ($form.length === 0 && !isEmpty(settingsTemporary.formSelector)) {
+                $form = $(settingsTemporary.formSelector);
+            }
+            if ($form.length > 0 && isEmpty(settingsTemporary.$submitButton)) {
+                settingsTemporary.$submitButton = $form.find("button");
+            }
+        }
+
+        var $submitbtn = settingsTemporary.$submitButton;
+        // form events
+        // catch form submit event ... 
+        var isFormSubmittingRequired = settingsTemporary.triggerValidationBeforeFormSubmit === true && $form.length > 0;
+
+        if (isFormSubmittingRequired) {
+            if ($form.length > 0) {
+                var allPlugins = pluginAttacherElements,
+                    inputsSentForValidationCount = 0,
+                    submitFormDirectly = false;
+
+                // fix validation on submit
+                $form.removeData("validator").removeData("unobtrusiveValidation");
+                $.validator.unobtrusive.parse($form);
+
+                $form.submit(function (e) {
+                    if (submitFormDirectly === false) {
+
+                        //pluginAttacherElements[i] = {
+                        //    plugin: creatingPlugin,
+                        //    additionalFields: additionalFields,
+                        //    $divContainer: $divElement,
+                        //    $input: $input,
+                        //    options: settings
+                        //};
+                        inputsSentForValidationCount = 0;
+                        for (var j = 0; j < allPlugins.length; j++) {
+                            var singlePlugin = allPlugins[j];
+                            // Updates pluginsCount if request is send to the server.
+                            inputsSentForValidationCount += singlePlugin.plugin.sendServerValidationRequestOnlyIfInputInvalidOrNotProcessed(singlePlugin.plugin);
+                        }
+                        if (inputsSentForValidationCount > 0) {
+                            e.preventDefault();
+                            $submitbtn.attr("disabled", "disabled");
+                        } else {
+                            //this.submit();
+                        }
+                    } else {
+                        // submitFormDirectly = true
+                        submitFormDirectly = false;
+                        this.submit();
+                    }
+                });
+
+                //attach event for when call is returned from server validation
+                for (i = 0; i < allPlugins.length; i++) {
+                    var singlePlugin = allPlugins[i].plugin,
+                        serverAlwaysCallingEventName = singlePlugin.getEventNameOfServerAlways(singlePlugin),
+                        $inputBox = singlePlugin.getInput();
+                    //attach event for when call is returned 
+                    $inputBox.on(serverAlwaysCallingEventName, function onServerExecutionCameBack() {
+                        var $this = $(this);
+                        console.log($this);
+                        inputsSentForValidationCount = inputsSentForValidationCount - 1; // one done.
+                        if (inputsSentForValidationCount === 0) { // when all done.
+                            setTimeout(function () {
+                                // if all inputs are valid then submit.
+                                var allValid = true;
+                                for (var j = 0; j < allPlugins.length; j++) {
+                                    var singlePluginObject = allPlugins[j].plugin;
+                                    if (singlePluginObject.isInvalid(singlePluginObject)) {
+                                        allValid = false;
+                                    }
+                                }
+                                if (allValid === true) {
+                                    submitFormDirectly = true;
+                                    $form.submit();
+                                }
+                                $submitbtn.removeAttr("disabled", "disabled");
+                            }, 500);
+                        }
+                    });
+                }
+
+            }
+        }
+
     };
 
 })(jQuery, window, document);
